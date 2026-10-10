@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#0e172a">
+  <meta name="description" content="Aplikasi PWA Al-Masar (المسar) - Strategi, Polisi & Fiqh Perancangan Dakwah Harakah Islamiyyah karya Syeikh Muhammad Ahmad Ar-Rasyid.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Al-Masar | Fiqh Perancangan Dakwah</title>
+  
+  <link rel="icon" type="image/png" href="./icons/favicon.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+  <!-- ================= APP HEADER ================= -->
+  <header class="app-header">
+    <div class="brand-wrapper" id="brandHomeBtn">
+      <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Buka Menu">
+        ☰
+      </button>
+      <img src="./icons/favicon.png" alt="Logo Al-Masar" class="brand-logo">
+      <div class="brand-text">
+        <h1>AL-MASAR <span class="ar-badge">المَسَار</span></h1>
+        <div class="brand-subtitle">Fiqh Perancangan & Strategi Harakah Islamiyyah</div>
+      </div>
+    </div>
+
+    <!-- Header Actions & Layer Switcher -->
+    <div class="header-actions">
+      <div class="layer-switcher" role="tablist">
+        <button class="layer-btn active" id="btnLayerLengkap" role="tab" aria-selected="true">
+          📖 <span>Versi Penuh</span>
+        </button>
+        <button class="layer-btn" id="btnLayerRingkasan" role="tab" aria-selected="false">
+          ⚡ <span>Ringkasan</span>
+        </button>
+      </div>
+
+      <button class="icon-btn" id="themeToggleBtn" title="Tukar Tema (Gelap/Cerah)" aria-label="Tukar Tema">
+        ☀️
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <div class="app-container">
+    
+    <!-- Sidebar / Drawer -->
+    <aside class="app-sidebar" id="appSidebar">
+      <!-- Search Input -->
+      <div class="search-box-wrap">
+        <div class="search-input-group">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Cari topik, dalil, tokoh..." autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Navigation Tree -->
+      <ul class="chapter-nav-list" id="chapterNavList">
+        <!-- Generated Dynamically -->
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-content" id="mainContent">
+
+      <!-- Hero / Introduction Card -->
+      <div class="hero-card" id="heroCard">
+        <span class="hero-badge">— SIRI MENGHIDUPKAN FIQH DAKWAH —</span>
+        <h2 class="hero-title">AL-MASAR (المَسَار)</h2>
+        <p class="hero-desc">
+          Karya agung As-Syeikh Muhammad Ahmad Ar-Rasyid (رحمه الله) yang mengupas strategi, polisi, dan fiqh perancangan harakah Islamiyyah merangkumi Polisi Luaran, Polisi Dalaman, dan Polisi Tarbawi.
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span>📚 Bab Utama:</span> <strong>11 Bab + Mukadimah</strong>
+          </div>
+          <div class="stat-item">
+            <span>📑 Sub-Tajuk:</span> <strong>116 Topik</strong>
+          </div>
+          <div class="stat-item">
+            <span>🌐 Status:</span> <strong style="color: var(--emerald-primary);">Luar Talian (Offline-First)</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reader Container -->
+      <article class="reader-container" id="readerContainer">
+        
+        <!-- Chapter & Subtopic Header -->
+        <div class="chapter-heading-banner">
+          <div class="ch-badge-meta">
+            <span class="ch-pill" id="chBadgePill">MUKADIMAH</span>
+            <span class="ch-ar-title" id="chArabicTitle">المسار</span>
+          </div>
+          <h2 class="subtopic-main-title" id="subtopicMainTitle">Memuatkan kandungan...</h2>
+        </div>
+
+        <!-- Sticky Reading Toolbar -->
+        <div class="reading-toolbar">
+          <div class="mode-indicator">
+            <span id="activeModeBadge">Versi Lengkap (Terjemahan Penuh)</span>
+          </div>
+
+          <div class="tools-group">
+            <button class="tool-btn" id="fontDecBtn" title="Kecilkan Fon">A-</button>
+            <button class="tool-btn" id="fontResetBtn" title="Set Semula Saiz Fon">A</button>
+            <button class="tool-btn" id="fontIncBtn" title="Besarkan Fon">A+</button>
+            <button class="tool-btn" id="bookmarkBtn" title="Tanda Bahagian Ini">☆ Tanda Buku</button>
+            <button class="tool-btn" id="copyBtn" title="Salin Petikan">📋 Salin</button>
+          </div>
+        </div>
+
+        <!-- Text / Body Content -->
+        <div class="content-body" id="contentBody">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="reader-bottom-nav">
+          <button class="nav-jump-btn" id="prevSubBtn" disabled>
+            ← Bahagian Sebelumnya
+          </button>
+          <button class="nav-jump-btn" id="nextSubBtn">
+            Bahagian Seterusnya →
+          </button>
+        </nav>
+      </article>
+
+    </main>
+  </div>
+
+  <!-- ================= SEARCH OVERLAY MODAL ================= -->
+  <div class="search-results-overlay" id="searchOverlay">
+    <div class="search-modal">
+      <div class="search-modal-header">
+        <div>
+          <h3 style="color: var(--gold-light);">Hasil Carian</h3>
+          <small id="searchCountBadge" style="color: var(--text-muted);"></small>
+        </div>
+        <button class="icon-btn" id="closeSearchBtn" style="font-size: 1.2rem;">✕</button>
+      </div>
+      <div class="search-results-list" id="searchResultsList">
+        <!-- Results appended here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notice" id="toastNotice">
+    <span id="toastIcon">ℹ️</span>
+    <span id="toastMsg">Notifikasi</span>
+  </div>
+
+  <!-- Data Script First (Offline Direct Access) -->
+  <script src="./data/almasar_data.js"></script>
+  <!-- Application Core Script -->
+  <script src="./js/app.js"></script>
+
+</body>
+</html>
