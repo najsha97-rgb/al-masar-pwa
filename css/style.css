@@ -215,6 +215,48 @@ body {
   transform: translateY(-2px);
 }
 
+/* Butang Muat Turun Versi Penuh PDF */
+.pdf-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-card);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.pdf-download-btn:hover {
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+  color: #0b132b;
+  border-color: var(--gold-primary);
+  box-shadow: 0 2px 10px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.pdf-download-btn .pdf-btn-icon {
+  font-size: 0.95rem;
+}
+
+[data-theme="light"] .pdf-download-btn {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+[data-theme="light"] .pdf-download-btn:hover {
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+  color: #0b132b;
+  border-color: var(--gold-primary);
+}
+
 /* ================= MAIN CONTAINER ================= */
 .app-container {
   display: flex;
@@ -453,6 +495,23 @@ body {
   font-weight: 800;
   color: #ffffff;
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Fon Arab Amiri untuk (المَسَار) supaya sepadan dengan tajuk Arab bab */
+.hero-ar-title {
+  font-family: 'Amiri', serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0;
+}
+
+[data-theme="light"] .hero-ar-title {
+  color: #8c6b00;
 }
 
 .hero-desc {
@@ -857,4 +916,17 @@ body {
 
 .mobile-menu-btn {
   display: none;
+}
+
+@media (max-width: 600px) {
+  .pdf-btn-text {
+    display: none;
+  }
+  .pdf-download-btn {
+    padding: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    justify-content: center;
+  }
 }
