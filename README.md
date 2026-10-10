@@ -1,4 +1,4 @@
-# Al-Masar (المسar) - Fiqh Perancangan & Strategi Dakwah PWA
+# Al-Masar (المسار) - Fiqh Perancangan & Strategi Dakwah PWA
 
 Aplikasi Web Progresif (PWA) interaktif berdasarkan karya agung Syeikh Muhammad Ahmad Ar-Rasyid: **Al-Masar (Fiqh Perancangan Dakwah)**.
 
