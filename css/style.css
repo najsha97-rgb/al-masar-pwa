@@ -124,12 +124,20 @@ body {
 }
 
 .brand-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
   object-fit: cover;
-  border: 1.5px solid var(--sapphire-light);
-  box-shadow: 0 0 14px var(--sapphire-glow);
+  border: 2px solid var(--gold-primary);
+  box-shadow: 0 0 16px rgba(2, 132, 199, 0.5), 0 0 8px rgba(234, 179, 8, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.brand-logo:hover {
+  transform: scale(1.08) rotate(4deg);
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.7), 0 0 14px rgba(234, 179, 8, 0.6);
+  border-color: var(--sapphire-light);
 }
 
 .brand-text h1 {
@@ -383,21 +391,33 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px;
-  height: 24px;
-  padding: 0 6px;
-  background: rgba(2, 132, 199, 0.16);
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  border-radius: 12px;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 5px;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(30, 58, 138, 0.45));
+  border: 1.5px solid rgba(56, 189, 248, 0.55);
+  border-radius: 50%;
   font-size: 0.75rem;
-  color: var(--sapphire-light);
+  font-weight: 700;
+  color: #ffffff;
   margin-right: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
 }
 
 [data-theme="light"] .chapter-num-badge {
-  background: #e0f2fe;
-  border-color: #7dd3fc;
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+  border-color: #38bdf8;
   color: #0369a1;
+  box-shadow: 0 1px 4px rgba(2, 132, 199, 0.2);
+}
+
+.chapter-header-btn:hover .chapter-num-badge {
+  background: linear-gradient(135deg, var(--gold-primary), #ca8a04);
+  color: #060e20;
+  border-color: var(--gold-light);
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
+  transform: scale(1.05);
 }
 
 .chapter-title-text {

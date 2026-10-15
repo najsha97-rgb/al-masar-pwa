@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v5-sapphire-20261015';
+const CACHE_NAME = 'almasar-pwa-v6-emblem-20261015';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const ASSETS_TO_CACHE = [
   './data/almasar_data.json',
   './data/almasar_quotes.js',
   './data/almasar_quotes.json',
+  './almasar_islamic_icon.jpg',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
