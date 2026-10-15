@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="theme-color" content="#0e172a">
-  <meta name="description" content="Aplikasi PWA Al-Masar (المسar) - Strategi, Polisi & Fiqh Perancangan Dakwah Harakah Islamiyyah karya Syeikh Muhammad Ahmad Ar-Rasyid.">
+  <meta name="theme-color" content="#060e20">
+  <meta name="description" content="Aplikasi PWA Al-Masar (المَسَار) - Strategi, Polisi & Fiqh Perancangan Dakwah Harakah Islamiyyah karya Syeikh Muhammad Ahmad Ar-Rasyid.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Al-Masar | Fiqh Perancangan Dakwah</title>
@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" href="./icons/favicon.png">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
   <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/style.css?v=20261015_sapphire">
 
   <!-- Google Fonts: Premium Manuscript Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Curved Pill Button & Capsule Styles (Matching Al-Muntalaq Elegant Footnotes) */
+    /* Curved Pill Button & Capsule Styles - Al-Masar Royal Sapphire Theme */
     .hikmah-action-btn {
       border-radius: 9999px !important;
       padding: 10px 24px !important;
@@ -28,7 +28,7 @@
       font-weight: 700 !important;
       cursor: pointer !important;
       outline: none !important;
-      border: 1px solid rgba(212, 175, 55, 0.45) !important;
+      border: 1px solid rgba(56, 189, 248, 0.45) !important;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
       user-select: none !important;
@@ -36,72 +36,72 @@
 
     .hikmah-btn-primary {
       background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark)) !important;
-      color: #0b132b !important;
+      color: #060e20 !important;
       border-color: var(--gold-light) !important;
     }
 
     .hikmah-btn-primary:hover {
-      background: linear-gradient(135deg, #fcd34d, var(--gold-primary)) !important;
+      background: linear-gradient(135deg, #fef08a, var(--gold-primary)) !important;
       color: #000000 !important;
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45) !important;
+      box-shadow: 0 6px 20px rgba(234, 179, 8, 0.45) !important;
     }
 
     .hikmah-btn-secondary {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.16) 0%, rgba(6, 78, 59, 0.35) 100%) !important;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.16) 0%, rgba(2, 132, 199, 0.35) 100%) !important;
       color: var(--gold-light) !important;
-      border-color: rgba(212, 175, 55, 0.45) !important;
+      border-color: rgba(56, 189, 248, 0.45) !important;
     }
 
     .hikmah-btn-secondary:hover {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(5, 150, 105, 0.5) 100%) !important;
-      border-color: var(--gold-light) !important;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.28) 0%, rgba(2, 132, 199, 0.55) 100%) !important;
+      border-color: var(--sapphire-light) !important;
       color: #ffffff !important;
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35) !important;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.4) !important;
     }
 
     .hikmah-btn-emerald {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 78, 59, 0.45) 100%) !important;
-      color: #34d399 !important;
-      border-color: rgba(16, 185, 129, 0.5) !important;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(14, 30, 64, 0.6) 100%) !important;
+      color: #38bdf8 !important;
+      border-color: rgba(56, 189, 248, 0.5) !important;
     }
 
     .hikmah-btn-emerald:hover {
-      background: linear-gradient(135deg, #10b981, #059669) !important;
+      background: linear-gradient(135deg, #0284c7, #0369a1) !important;
       color: #ffffff !important;
-      border-color: #34d399 !important;
+      border-color: #7dd3fc !important;
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.45) !important;
     }
 
-    /* Kotak Carian Melengkung */
+    /* Kotak Carian Melengkung - Sapphire Focus Glow */
     .hikmah-search-input {
       width: 100% !important;
       padding: 12px 20px 12px 46px !important;
       border-radius: 25px !important;
-      border: 1px solid rgba(212, 175, 55, 0.45) !important;
-      background: linear-gradient(135deg, rgba(14, 23, 42, 0.95) 0%, rgba(8, 13, 26, 0.98) 100%) !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      background: linear-gradient(135deg, rgba(14, 28, 58, 0.95) 0%, rgba(6, 14, 32, 0.98) 100%) !important;
       color: var(--text-main) !important;
       font-size: 0.95rem !important;
       font-family: 'Plus Jakarta Sans', sans-serif !important;
       outline: none !important;
       transition: all 0.25s ease !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
     }
 
     [data-theme="light"] .hikmah-search-input {
-      background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 100%) !important;
-      border-color: rgba(180, 138, 28, 0.45) !important;
-      color: #0f172a !important;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%) !important;
+      border-color: rgba(2, 132, 199, 0.4) !important;
+      color: #0b172a !important;
     }
 
     .hikmah-search-input:focus {
-      border-color: var(--gold-primary) !important;
-      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25), 0 0 15px rgba(212, 175, 55, 0.2) !important;
+      border-color: var(--sapphire-light) !important;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25), 0 0 15px rgba(2, 132, 199, 0.25) !important;
     }
 
-    /* Butang Cip Penapis */
+    /* Butang Cip Penapis - Sapphire & Amber */
     .hikmah-chip-btn {
       display: inline-flex !important;
       align-items: center !important;
@@ -109,8 +109,8 @@
       padding: 7px 18px !important;
       min-height: 34px !important;
       border-radius: 22px !important;
-      border: 1px solid rgba(212, 175, 55, 0.35) !important;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(6, 78, 59, 0.25) 100%) !important;
+      border: 1px solid rgba(56, 189, 248, 0.35) !important;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(2, 132, 199, 0.22) 100%) !important;
       color: var(--text-muted) !important;
       font-size: 0.84rem !important;
       font-weight: 600 !important;
@@ -122,18 +122,18 @@
     }
 
     .hikmah-chip-btn:hover {
-      border-color: var(--gold-primary) !important;
-      color: var(--gold-light) !important;
+      border-color: var(--sapphire-light) !important;
+      color: var(--sapphire-light) !important;
       transform: translateY(-1.5px);
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(6, 78, 59, 0.4) 100%) !important;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.18) 0%, rgba(2, 132, 199, 0.38) 100%) !important;
     }
 
     .hikmah-chip-btn.active {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.35) 0%, rgba(16, 185, 129, 0.3) 100%) !important;
-      border-color: var(--gold-light) !important;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.4) 0%, rgba(37, 99, 235, 0.45) 100%) !important;
+      border-color: var(--sapphire-light) !important;
       color: #ffffff !important;
       font-weight: 700 !important;
-      box-shadow: 0 3px 12px rgba(212, 175, 55, 0.3), 0 0 10px rgba(16, 185, 129, 0.25) !important;
+      box-shadow: 0 3px 12px rgba(2, 132, 199, 0.38), 0 0 10px rgba(56, 189, 248, 0.3) !important;
       transform: translateY(-1.5px);
     }
 
@@ -152,8 +152,8 @@
       letter-spacing: 0.3px !important;
       cursor: pointer !important;
       outline: none !important;
-      border: 1px solid rgba(212, 175, 55, 0.45) !important;
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.16) 0%, rgba(6, 78, 59, 0.35) 100%) !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.14) 0%, rgba(2, 132, 199, 0.28) 100%) !important;
       color: var(--gold-light) !important;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -161,11 +161,11 @@
     }
 
     .hikmah-card-btn:hover {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.28) 0%, rgba(5, 150, 105, 0.5) 100%) !important;
-      border-color: var(--gold-light) !important;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+      border-color: var(--sapphire-light) !important;
       color: #ffffff !important;
       transform: translateY(-2px);
-      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35), 0 0 12px rgba(16, 185, 129, 0.3) !important;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.45) !important;
     }
 
     .hikmah-card-btn:active {
@@ -173,16 +173,16 @@
     }
 
     [data-theme="light"] .hikmah-card-btn {
-      background: linear-gradient(135deg, rgba(255, 251, 235, 0.95) 0%, rgba(240, 253, 244, 0.9) 100%) !important;
-      border: 1px solid rgba(180, 138, 28, 0.45) !important;
-      color: #8c6b00 !important;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%) !important;
+      border: 1px solid rgba(2, 132, 199, 0.35) !important;
+      color: #0369a1 !important;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
     }
 
     [data-theme="light"] .hikmah-card-btn:hover {
-      background: #b48a1c !important;
+      background: #0284c7 !important;
       color: #ffffff !important;
-      border-color: #8c6b00 !important;
+      border-color: #0369a1 !important;
     }
 
     /* Rujukan Bab Pill */
@@ -191,20 +191,20 @@
       align-items: center !important;
       gap: 5px !important;
       font-size: 0.78rem !important;
-      color: var(--gold-light) !important;
+      color: var(--sapphire-light) !important;
       font-weight: 700 !important;
       text-decoration: none !important;
       cursor: pointer !important;
       padding: 4px 12px !important;
       border-radius: 16px !important;
-      background: rgba(212, 175, 55, 0.1) !important;
-      border: 1px solid rgba(212, 175, 55, 0.3) !important;
+      background: rgba(2, 132, 199, 0.15) !important;
+      border: 1px solid rgba(56, 189, 248, 0.35) !important;
       transition: all 0.2s ease !important;
     }
 
     .hikmah-card-chapter:hover {
-      background: rgba(212, 175, 55, 0.22) !important;
-      border-color: var(--gold-light) !important;
+      background: rgba(2, 132, 199, 0.28) !important;
+      border-color: var(--sapphire-light) !important;
       transform: translateY(-1px);
     }
   </style>

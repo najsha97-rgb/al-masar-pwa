@@ -1,26 +1,32 @@
 /* ==========================================================================
    AL-MASAR PWA - STYLESHEET
-   Siri Fiqh Perancangan Dakwah - Syeikh Muhammad Ahmad Ar-Rasyid
+   Siri Fiqh Perancangan & Strategi Dakwah - Syeikh Muhammad Ahmad Ar-Rasyid
+   Identiti Visual: Royal Sapphire Navy & Radiant Amber Gold
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Dark Theme (Default) */
-  --bg-app: #080d1a;
-  --bg-sidebar: #0e172a;
-  --bg-card: rgba(22, 33, 62, 0.75);
-  --bg-card-hover: rgba(30, 45, 82, 0.85);
-  --bg-header: rgba(14, 23, 42, 0.85);
-  --bg-input: #152238;
-  --border-subtle: rgba(212, 175, 55, 0.2);
-  --border-card: rgba(255, 255, 255, 0.08);
+  /* Dark Theme (Default) - Deep Cosmic Midnight Sapphire */
+  --bg-app: #060e20;
+  --bg-sidebar: #0a1630;
+  --bg-card: rgba(14, 28, 58, 0.82);
+  --bg-card-hover: rgba(22, 42, 82, 0.90);
+  --bg-header: rgba(10, 22, 48, 0.92);
+  --bg-input: #122346;
+  --border-subtle: rgba(56, 189, 248, 0.28);
+  --border-card: rgba(56, 189, 248, 0.12);
 
-  /* Brand Accents */
-  --gold-primary: #d4af37;
-  --gold-light: #f5d77f;
-  --gold-dark: #aa8620;
-  --gold-glow: rgba(212, 175, 55, 0.35);
+  /* Brand Accents - Royal Sapphire & Radiant Amber Gold */
+  --gold-primary: #eab308;
+  --gold-light: #fde047;
+  --gold-dark: #ca8a04;
+  --gold-glow: rgba(234, 179, 8, 0.38);
+
+  --sapphire-primary: #0284c7;
+  --sapphire-light: #38bdf8;
+  --sapphire-dark: #0369a1;
+  --sapphire-glow: rgba(56, 189, 248, 0.45);
 
   --emerald-primary: #10b981;
   --emerald-glow: rgba(16, 185, 129, 0.3);
@@ -28,10 +34,10 @@
   --blue-primary: #38bdf8;
 
   /* Typography */
-  --text-main: #f1f5f9;
-  --text-muted: #94a3b8;
-  --text-light: #cbd5e1;
-  --text-gold: #f5d77f;
+  --text-main: #f0f6fc;
+  --text-muted: #94a7c4;
+  --text-light: #cde0f7;
+  --text-gold: #fde047;
 
   /* Sizing & Transitions */
   --font-base: 1.05rem;
@@ -40,24 +46,25 @@
   --radius-md: 14px;
   --radius-lg: 20px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --shadow-glow: 0 8px 32px 0 rgba(2, 132, 199, 0.25);
 }
 
 [data-theme="light"] {
-  --bg-app: #f4f6fb;
+  /* Light Theme - Clean Glacier Pearl & Cool Slate */
+  --bg-app: #f1f5fa;
   --bg-sidebar: #ffffff;
   --bg-card: #ffffff;
-  --bg-card-hover: #f8fafc;
-  --bg-header: rgba(255, 255, 255, 0.9);
-  --bg-input: #f1f5f9;
-  --border-subtle: rgba(212, 175, 55, 0.4);
-  --border-card: #e2e8f0;
+  --bg-card-hover: #f3f7fd;
+  --bg-header: rgba(255, 255, 255, 0.94);
+  --bg-input: #e4edf8;
+  --border-subtle: rgba(2, 132, 199, 0.35);
+  --border-card: #cbd5e1;
 
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-light: #334155;
-  --text-gold: #b38600;
-  --shadow-glow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+  --text-main: #0b172a;
+  --text-muted: #475569;
+  --text-light: #1e3a8a;
+  --text-gold: #b45309;
+  --shadow-glow: 0 10px 25px -5px rgba(2, 132, 199, 0.08);
 }
 
 * {
@@ -85,11 +92,11 @@ body {
   background: var(--bg-app);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.3);
+  background: rgba(56, 189, 248, 0.3);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gold-primary);
+  background: var(--sapphire-light);
 }
 
 /* ================= HEADER ================= */
@@ -106,7 +113,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.16);
 }
 
 .brand-wrapper {
@@ -121,8 +128,8 @@ body {
   height: 40px;
   border-radius: var(--radius-sm);
   object-fit: cover;
-  border: 1.5px solid var(--gold-primary);
-  box-shadow: 0 0 12px var(--gold-glow);
+  border: 1.5px solid var(--sapphire-light);
+  box-shadow: 0 0 14px var(--sapphire-glow);
 }
 
 .brand-text h1 {
@@ -130,7 +137,7 @@ body {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #fff 40%, var(--gold-primary));
+  background: linear-gradient(135deg, #ffffff 30%, var(--gold-light) 65%, var(--sapphire-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: flex;
@@ -139,7 +146,7 @@ body {
 }
 
 [data-theme="light"] .brand-text h1 {
-  background: linear-gradient(135deg, #0f172a 40%, var(--gold-dark));
+  background: linear-gradient(135deg, #0b172a 35%, #b45309 70%, #0284c7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -379,12 +386,18 @@ body {
   min-width: 24px;
   height: 24px;
   padding: 0 6px;
-  background: var(--bg-input);
-  border: 1px solid var(--border-card);
+  background: rgba(2, 132, 199, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.4);
   border-radius: 12px;
   font-size: 0.75rem;
-  color: var(--gold-primary);
+  color: var(--sapphire-light);
   margin-right: 8px;
+}
+
+[data-theme="light"] .chapter-num-badge {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #0369a1;
 }
 
 .chapter-title-text {
@@ -434,14 +447,20 @@ body {
 
 .subtopic-nav-btn:hover {
   color: var(--text-main);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(2, 132, 199, 0.08);
 }
 
 .subtopic-nav-btn.active-sub {
-  color: var(--gold-light);
-  background: rgba(212, 175, 55, 0.15);
+  color: var(--sapphire-light);
+  background: rgba(2, 132, 199, 0.18);
   font-weight: 600;
-  border-left: 3px solid var(--gold-primary);
+  border-left: 3px solid var(--sapphire-light);
+}
+
+[data-theme="light"] .subtopic-nav-btn.active-sub {
+  color: #0284c7;
+  background: #e0f2fe;
+  border-left-color: #0284c7;
 }
 
 /* ================= CONTENT AREA ================= */
@@ -452,16 +471,16 @@ body {
   margin: 0 auto;
 }
 
-/* Hero / Announcement Card */
+/* Hero / Announcement Card - Royal Sapphire & Star Gold Glow */
 .hero-card {
-  background: linear-gradient(135deg, rgba(20, 32, 60, 0.9), rgba(10, 18, 38, 0.95));
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(135deg, rgba(14, 30, 64, 0.95), rgba(8, 18, 40, 0.98));
+  border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: var(--radius-md);
   padding: 1.5rem 2rem;
   margin-bottom: 2rem;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 12px 35px rgba(2, 132, 199, 0.22);
   transition: var(--transition);
 }
 
@@ -472,15 +491,15 @@ body {
   right: -10px;
   bottom: -30px;
   font-size: 9rem;
-  color: rgba(212, 175, 55, 0.04);
+  color: rgba(56, 189, 248, 0.06);
   pointer-events: none;
 }
 
 .hero-badge {
   display: inline-block;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid var(--gold-primary);
-  color: var(--gold-primary);
+  background: rgba(2, 132, 199, 0.18);
+  border: 1px solid var(--sapphire-light);
+  color: var(--sapphire-light);
   padding: 4px 12px;
   border-radius: 30px;
   font-size: 0.78rem;
@@ -511,7 +530,7 @@ body {
 }
 
 [data-theme="light"] .hero-ar-title {
-  color: #8c6b00;
+  color: #b45309;
 }
 
 .hero-desc {
@@ -594,14 +613,21 @@ body {
 }
 
 .ch-pill {
-  background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
-  color: var(--gold-primary);
-  padding: 3px 10px;
+  background: rgba(2, 132, 199, 0.18);
+  border: 1px solid var(--sapphire-light);
+  color: var(--sapphire-light);
+  padding: 3px 12px;
   border-radius: 20px;
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="light"] .ch-pill {
+  background: #e0f2fe;
+  border-color: #0284c7;
+  color: #0369a1;
 }
 
 .ch-ar-title {
