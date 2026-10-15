@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v6-emblem-20261015';
+const CACHE_NAME = 'almasar-pwa-v7-bab11-20261015-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
