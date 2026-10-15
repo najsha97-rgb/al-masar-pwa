@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Data Initialization
   const data = window.ALMASAR_DATA || null;
+  const allHikmahQuotes = window.ALMASAR_QUOTES || [];
   if (!data) {
     console.error('Data Al-Masar tidak dijumpai!');
     return;
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const state = {
     currentChapter: 0,
     currentSubtopic: 0,
-    layer: localStorage.getItem('almasar_layer') || 'layer1', // 'layer1' = Lengkap, 'layer2' = Ringkasan
+    layer: localStorage.getItem('almasar_layer') || 'layer1', // 'layer1' = Lengkap, 'layer2' = Ringkasan, 'layer3' = Mutiara Hikmah
     theme: localStorage.getItem('almasar_theme') || 'dark',
     fontSize: parseFloat(localStorage.getItem('almasar_fontsize') || '1.05'),
     bookmarks: JSON.parse(localStorage.getItem('almasar_bookmarks') || '[]'),
@@ -30,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const layerBtnLengkap = document.getElementById('btnLayerLengkap');
   const layerBtnRingkasan = document.getElementById('btnLayerRingkasan');
+  const layerBtnHikmah = document.getElementById('btnLayerHikmah');
+  const sidebarHikmahBtn = document.getElementById('sidebarHikmahBtn');
   const themeToggleBtn = document.getElementById('themeToggleBtn');
   const fontDecBtn = document.getElementById('fontDecBtn');
   const fontIncBtn = document.getElementById('fontIncBtn');
@@ -123,12 +126,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentNavItem) {
       currentNavItem.classList.add('open');
     }
-  }
-
-  // 5. Navigate to Chapter and Subtopic
+  }  // 5. Navigate to Chapter and Subtopic
   function navigateTo(chIdx, sIdx) {
     state.currentChapter = chIdx;
     state.currentSubtopic = sIdx;
+
+    if (state.layer === 'layer3') {
+      state.layer = 'layer1';
+      localStorage.setItem('almasar_layer', 'layer1');
+      layerBtnLengkap.classList.add('active');
+      layerBtnRingkasan.classList.remove('active');
+      if (layerBtnHikmah) layerBtnHikmah.classList.remove('active');
+      layerBtnLengkap.setAttribute('aria-selected', 'true');
+      layerBtnRingkasan.setAttribute('aria-selected', 'false');
+      if (layerBtnHikmah) layerBtnHikmah.setAttribute('aria-selected', 'false');
+    }
 
     // Update active classes in sidebar
     document.querySelectorAll('.chapter-nav-item').forEach((item, idx) => {
@@ -156,6 +168,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ch) return;
     const sub = ch.subtopics[state.currentSubtopic];
     if (!sub) return;
+
+    if (state.layer === 'layer3') {
+      heroCard.style.display = 'none';
+      readerContainer.style.display = 'block';
+
+      document.getElementById('chBadgePill').textContent = '💎 KOLEKSI EMAS DAKWAH';
+      document.getElementById('chArabicTitle').textContent = 'درر الحكمة والدعوة';
+      document.getElementById('subtopicMainTitle').textContent = 'Mutiara Hikmah & Kata-Kata Tokoh';
+
+      const modeBadge = document.getElementById('activeModeBadge');
+      modeBadge.textContent = `Koleksi ${allHikmahQuotes.length} Mutiara Hikmah (Nukilan Tokoh Salaf, Hadis & Taujih Ar-Rasyid)`;
+
+      updateBookmarkBtnStatus();
+      const contentBody = document.getElementById('contentBody');
+      contentBody.innerHTML = '';
+      renderHikmahView(contentBody);
+      updateBottomNav();
+      return;
+    }
 
     // Hide hero after navigation or show meta
     heroCard.style.display = (state.currentChapter === 0 && state.currentSubtopic === 0) ? 'block' : 'none';
@@ -227,13 +258,41 @@ document.addEventListener('DOMContentLoaded', () => {
       contentBody.appendChild(summaryBox);
     }
 
+    // Paparan Jalur Mutiara Hikmah Bab / Bahagian Ini (jika ada mutiara hikmah berkaitan)
+    const currentSubQuotes = allHikmahQuotes.filter(q => q.chapterIndex === state.currentChapter && q.subtopicIndex === state.currentSubtopic);
+    if (currentSubQuotes.length > 0 && (state.layer === 'layer1' || state.layer === 'layer2')) {
+      const chHikmahWrap = document.createElement('div');
+      chHikmahWrap.className = 'chapter-hikmah-box';
+      chHikmahWrap.innerHTML = `
+        <div class="chapter-hikmah-title">
+          <span>💎</span>
+          <span>Mutiara Hikmah Topik Ini (${currentSubQuotes.length} Mutiara Emas)</span>
+          <button class="hikmah-card-btn" id="btnViewChapterHikmah" style="margin-left: auto; color: var(--gold-light); border-color: rgba(212, 175, 55, 0.4);">
+            Buka Semua Mutiara →
+          </button>
+        </div>
+        <div style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main);">
+          <span class="hikmah-speaker-pill" style="font-size: 0.78rem; margin-bottom: 6px;">👤 ${currentSubQuotes[0].speaker}</span>
+          <div style="margin-top: 6px;">${formatHikmahQuote(currentSubQuotes[0].quote)}</div>
+        </div>
+      `;
+      contentBody.appendChild(chHikmahWrap);
+
+      const btnViewAll = chHikmahWrap.querySelector('#btnViewChapterHikmah');
+      if (btnViewAll) {
+        btnViewAll.addEventListener('click', () => {
+          setLayer('layer3');
+        });
+      }
+    }
+
     // Update Bottom Navigation buttons
     updateBottomNav();
   }
 
   function formatQuoteText(text) {
-    // Highlight potential names
-    const names = ['Imam Hasan al-Banna', 'Sayyid Qutb', 'Umar bin al-Khattab', 'Abu al-Dardak', 'Ibn al-Qayyim', 'Imam Ahmad', 'Yahya bin Mu’az', 'Abdullah bin Wahab', 'al-Ma’mun', 'Rasulullah saw', 'Nabi saw', 'Iqbal'];
+    // Highlight potential names (dengan ejaan standard kemas kini)
+    const names = ['Imam Hasan al-Banna', 'Hasan al-Banna', 'Sayyid Qutb', 'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Ibn Taimiyah', 'Imam Ahmad', 'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 'Rasulullah saw', 'Rasulullah SAW', 'Nabi saw', 'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'];
     let formatted = text;
     names.forEach(name => {
       const regex = new RegExp(`(${name})`, 'gi');
@@ -244,6 +303,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 7. Bottom Navigation (Prev / Next)
   function updateBottomNav() {
+    if (state.layer === 'layer3') {
+      prevSubBtn.disabled = false;
+      nextSubBtn.disabled = false;
+      prevSubBtn.innerHTML = '← Baca Versi Lengkap';
+      prevSubBtn.title = 'Buka Versi Lengkap Topik Semasa';
+      nextSubBtn.innerHTML = 'Baca Ringkasan Topik →';
+      nextSubBtn.title = 'Buka Ringkasan Topik Semasa';
+      return;
+    }
+
     const ch = data.chapters[state.currentChapter];
     
     // Check Previous
@@ -274,6 +343,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   prevSubBtn.addEventListener('click', () => {
+    if (state.layer === 'layer3') {
+      setLayer('layer1');
+      return;
+    }
     if (state.currentSubtopic > 0) {
       navigateTo(state.currentChapter, state.currentSubtopic - 1);
     } else if (state.currentChapter > 0) {
@@ -284,6 +357,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   nextSubBtn.addEventListener('click', () => {
+    if (state.layer === 'layer3') {
+      setLayer('layer2');
+      return;
+    }
     const ch = data.chapters[state.currentChapter];
     if (state.currentSubtopic < ch.subtopics.length - 1) {
       navigateTo(state.currentChapter, state.currentSubtopic + 1);
@@ -292,20 +369,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 8. Layer Switching
+  // 8. Layer Switching (Lengkap vs Ringkasan vs Mutiara Hikmah)
   function setLayer(layerName) {
     state.layer = layerName;
     localStorage.setItem('almasar_layer', layerName);
 
     layerBtnLengkap.classList.toggle('active', layerName === 'layer1');
     layerBtnRingkasan.classList.toggle('active', layerName === 'layer2');
+    if (layerBtnHikmah) {
+      layerBtnHikmah.classList.toggle('active', layerName === 'layer3');
+      layerBtnHikmah.setAttribute('aria-selected', layerName === 'layer3');
+    }
+    layerBtnLengkap.setAttribute('aria-selected', layerName === 'layer1');
+    layerBtnRingkasan.setAttribute('aria-selected', layerName === 'layer2');
 
     renderContent();
-    showToast(layerName === 'layer1' ? 'Mod Paparan: Versi Penuh' : 'Mod Paparan: Ringkasan Eksklusif');
+    let toastText = 'Mod Paparan: Versi Penuh';
+    if (layerName === 'layer2') toastText = 'Mod Paparan: Ringkasan Eksklusif';
+    if (layerName === 'layer3') toastText = 'Mod Mutiara Hikmah Dakwah dibuka 💎';
+    showToast(toastText);
   }
 
   layerBtnLengkap.addEventListener('click', () => setLayer('layer1'));
   layerBtnRingkasan.addEventListener('click', () => setLayer('layer2'));
+  if (layerBtnHikmah) {
+    layerBtnHikmah.addEventListener('click', () => setLayer('layer3'));
+  }
+  if (sidebarHikmahBtn) {
+    sidebarHikmahBtn.addEventListener('click', () => {
+      setLayer('layer3');
+      if (state.mobileNavOpen) {
+        toggleMobileNav(false);
+      }
+    });
+  }
 
   // 9. Theme Switching
   function updateThemeIcon() {
@@ -374,14 +471,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 12. Copy Link / Content
   copyBtn.addEventListener('click', () => {
+    if (state.layer === 'layer3') {
+      const item = allHikmahQuotes[currentFeaturedHikmahIndex] || allHikmahQuotes[0];
+      if (item) copyHikmahToClipboard(item);
+      return;
+    }
+
     const ch = data.chapters[state.currentChapter];
     const sub = ch.subtopics[state.currentSubtopic];
     const textToCopy = `Al-Masar (${ch.title} - ${sub.title}):\n\n` + 
       (sub.paragraphs ? sub.paragraphs.slice(0, 2).join('\n\n') : sub.summary);
 
-    navigator.clipboard.writeText(textToCopy)
-      .then(() => showToast('Petikan berjaya disalin ke papan klip!'))
-      .catch(() => showToast('Gagal menyalin petikan.'));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => showToast('Petikan berjaya disalin ke papan klip!'))
+        .catch(() => fallbackCopyText(textToCopy));
+    } else {
+      fallbackCopyText(textToCopy);
+    }
   });
 
   // 13. Search Engine
@@ -492,8 +599,293 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2800);
   }
 
+  // ==========================================================================
+  // MUTIARA HIKMAH DAKWAH (LAYER 3 LOGIC)
+  // ==========================================================================
+  let currentFeaturedHikmahIndex = Math.floor(Math.random() * (allHikmahQuotes.length || 1));
+  let activeHikmahCategory = 'all';
+  let hikmahSearchQuery = '';
+
+  function renderHikmahView(container) {
+    if (!allHikmahQuotes || allHikmahQuotes.length === 0) {
+      container.innerHTML = '<p class="text-muted" style="text-align:center; padding: 2rem;">Koleksi mutiara hikmah sedang dikemas kini.</p>';
+      return;
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'hikmah-container';
+
+    // 1. Featured Hero Random Quote Card
+    const heroCardEl = document.createElement('div');
+    heroCardEl.className = 'hikmah-hero-card';
+    heroCardEl.id = 'hikmahFeaturedCard';
+    wrap.appendChild(heroCardEl);
+
+    // 2. Toolbar (Search & Filter Chips)
+    const toolbarEl = document.createElement('div');
+    toolbarEl.className = 'hikmah-toolbar';
+    toolbarEl.innerHTML = `
+      <div class="hikmah-search-wrap">
+        <span class="hikmah-search-icon">🔍</span>
+        <input type="text" class="hikmah-search-input" id="hikmahSearchInput" placeholder="Cari kata hikmah, nama tokoh, dalil, atau topik..." value="${hikmahSearchQuery}">
+      </div>
+      <div class="hikmah-filter-chips" id="hikmahFilterChips">
+        <button class="hikmah-chip-btn ${activeHikmahCategory === 'all' ? 'active' : ''}" data-cat="all">Semua (${allHikmahQuotes.length})</button>
+        <button class="hikmah-chip-btn ${activeHikmahCategory === 'salaf' ? 'active' : ''}" data-cat="salaf">Ulama & Salaf</button>
+        <button class="hikmah-chip-btn ${activeHikmahCategory === 'sahabat' ? 'active' : ''}" data-cat="sahabat">Sahabat & Khulafa' RA</button>
+        <button class="hikmah-chip-btn ${activeHikmahCategory === 'rasyid' ? 'active' : ''}" data-cat="rasyid">Syeikh Ar-Rasyid</button>
+        <button class="hikmah-chip-btn ${activeHikmahCategory === 'banna' ? 'active' : ''}" data-cat="banna">Imam Hasan Al-Banna</button>
+        <button class="hikmah-chip-btn ${activeHikmahCategory === 'iqbal' ? 'active' : ''}" data-cat="iqbal">Pujangga Iqbal</button>
+      </div>
+    `;
+    wrap.appendChild(toolbarEl);
+
+    // 3. Grid List of Quotes
+    const gridEl = document.createElement('div');
+    gridEl.className = 'hikmah-grid';
+    gridEl.id = 'hikmahGrid';
+    wrap.appendChild(gridEl);
+
+    container.appendChild(wrap);
+
+    // Render Featured Quote and Grid
+    updateFeaturedCard(heroCardEl);
+    updateHikmahGrid(gridEl);
+
+    // Attach Search listener
+    const searchInputEl = toolbarEl.querySelector('#hikmahSearchInput');
+    searchInputEl.addEventListener('input', (e) => {
+      hikmahSearchQuery = e.target.value.toLowerCase().trim();
+      updateHikmahGrid(gridEl);
+    });
+
+    // Attach Filter Chips listeners
+    toolbarEl.querySelectorAll('.hikmah-chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        toolbarEl.querySelectorAll('.hikmah-chip-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeHikmahCategory = btn.getAttribute('data-cat');
+        updateHikmahGrid(gridEl);
+      });
+    });
+  }
+
+  function updateFeaturedCard(cardEl) {
+    if (!cardEl) cardEl = document.getElementById('hikmahFeaturedCard');
+    if (!cardEl) return;
+
+    const item = allHikmahQuotes[currentFeaturedHikmahIndex] || allHikmahQuotes[0];
+
+    cardEl.innerHTML = `
+      <div class="hikmah-hero-header">
+        <div class="hikmah-tag-group">
+          <span class="hikmah-hero-badge">💎 MUTIARA HIKMAH PILIHAN</span>
+          <span class="hikmah-speaker-pill">👤 ${item.speaker}</span>
+        </div>
+        <span style="font-size: 0.8rem; color: var(--gold-light); font-weight: 600;">#${currentFeaturedHikmahIndex + 1} daripada ${allHikmahQuotes.length}</span>
+      </div>
+
+      <div class="hikmah-hero-quote">
+        ${formatHikmahQuote(item.quote)}
+      </div>
+
+      <div class="hikmah-hero-source">
+        <span>📚 Sumber:</span>
+        <strong>${item.chapterNumber} — ${item.chapterTitle} (${item.subtopicTitle})</strong>
+      </div>
+
+      <div class="hikmah-actions-row">
+        <button class="hikmah-action-btn hikmah-btn-primary" id="btnNextRandomHikmah">
+          <span>🔄</span>
+          <span>Jana Hikmah Lain (Rawak)</span>
+        </button>
+        <button class="hikmah-action-btn hikmah-btn-secondary" id="btnCopyFeaturedHikmah">
+          <span>📋</span>
+          <span>Salin Hikmah</span>
+        </button>
+        <button class="hikmah-action-btn hikmah-btn-emerald" id="btnReadChapterFeatured">
+          <span>📖</span>
+          <span>Buka Bahagian Lengkap</span>
+        </button>
+      </div>
+    `;
+
+    // Action button listeners
+    const btnNext = cardEl.querySelector('#btnNextRandomHikmah');
+    if (btnNext) {
+      btnNext.addEventListener('click', () => {
+        let nextIdx = Math.floor(Math.random() * allHikmahQuotes.length);
+        if (nextIdx === currentFeaturedHikmahIndex && allHikmahQuotes.length > 1) {
+          nextIdx = (nextIdx + 1) % allHikmahQuotes.length;
+        }
+        currentFeaturedHikmahIndex = nextIdx;
+        updateFeaturedCard(cardEl);
+      });
+    }
+
+    const btnCopy = cardEl.querySelector('#btnCopyFeaturedHikmah');
+    if (btnCopy) {
+      btnCopy.addEventListener('click', () => {
+        copyHikmahToClipboard(item);
+      });
+    }
+
+    const btnRead = cardEl.querySelector('#btnReadChapterFeatured');
+    if (btnRead) {
+      btnRead.addEventListener('click', () => {
+        navigateTo(item.chapterIndex, item.subtopicIndex);
+        setLayer('layer1');
+      });
+    }
+  }
+
+  function filterHikmahQuotes() {
+    return allHikmahQuotes.filter(item => {
+      // 1. Search query match
+      if (hikmahSearchQuery) {
+        const textToSearch = `${item.speaker} ${item.quote} ${item.chapterNumber} ${item.chapterTitle} ${item.subtopicTitle}`.toLowerCase();
+        if (!textToSearch.includes(hikmahSearchQuery)) {
+          return false;
+        }
+      }
+
+      // 2. Category match
+      if (activeHikmahCategory === 'sahabat') {
+        return item.category === 'sahabat';
+      } else if (activeHikmahCategory === 'banna') {
+        return item.category === 'banna';
+      } else if (activeHikmahCategory === 'iqbal') {
+        return item.category === 'iqbal';
+      } else if (activeHikmahCategory === 'salaf') {
+        return item.category === 'salaf';
+      } else if (activeHikmahCategory === 'rasyid') {
+        return item.category === 'rasyid';
+      }
+
+      return true; // 'all'
+    });
+  }
+
+  function updateHikmahGrid(gridEl) {
+    if (!gridEl) gridEl = document.getElementById('hikmahGrid');
+    if (!gridEl) return;
+
+    const filtered = filterHikmahQuotes();
+    gridEl.innerHTML = '';
+
+    if (filtered.length === 0) {
+      gridEl.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+          <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🔍</div>
+          <p style="font-weight: 600; color: var(--gold-light);">Tiada kata hikmah ditemui bagi carian ini</p>
+          <small>Sila cuba kata kunci lain atau pilih tab 'Semua'.</small>
+        </div>
+      `;
+      return;
+    }
+
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'hikmah-card';
+      card.innerHTML = `
+        <div>
+          <div class="hikmah-card-top">
+            <span class="hikmah-card-speaker">👤 ${item.speaker}</span>
+            <span class="hikmah-card-index">#${item.id}</span>
+          </div>
+          <div class="hikmah-card-body">
+            ${formatHikmahQuote(item.quote)}
+          </div>
+        </div>
+        <div class="hikmah-card-footer">
+          <span class="hikmah-card-chapter" title="Buka bahagian ini">${item.chapterNumber}: ${item.subtopicTitle.length > 20 ? item.subtopicTitle.substring(0, 18) + '..' : item.subtopicTitle}</span>
+          <div class="hikmah-card-actions">
+            <button class="hikmah-card-btn btn-copy-card" title="Salin kata hikmah ini">
+              <span>📋</span>
+              <span>Salin</span>
+            </button>
+            <button class="hikmah-card-btn btn-read-card" title="Buka bahagian lengkap">
+              <span>📖</span>
+              <span>Topik</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Copy listener
+      card.querySelector('.btn-copy-card').addEventListener('click', () => {
+        copyHikmahToClipboard(item);
+      });
+
+      // Read Chapter listener
+      card.querySelector('.btn-read-card').addEventListener('click', () => {
+        navigateTo(item.chapterIndex, item.subtopicIndex);
+        setLayer('layer1');
+      });
+
+      card.querySelector('.hikmah-card-chapter').addEventListener('click', () => {
+        navigateTo(item.chapterIndex, item.subtopicIndex);
+        setLayer('layer1');
+      });
+
+      gridEl.appendChild(card);
+    });
+  }
+
+  function formatHikmahQuote(text) {
+    if (!text) return '';
+    let formatted = text;
+    // Highlight Arabic quotation brackets « ... »
+    formatted = formatted.replace(/«\s*(.*?)\s*»/g, '<span class="ar-quote">« $1 »</span>');
+    // Highlight Malay / English quoted speech “...”
+    formatted = formatted.replace(/“\s*(.*?)\s*”/g, '<strong style="color: var(--gold-light);">“$1”</strong>');
+    return formatted;
+  }
+
+  function copyHikmahToClipboard(item) {
+    const textToCopy = `💎 MUTIARA HIKMAH DAKWAH\n` +
+      `👤 ${item.speaker}\n` +
+      `━━━━━━━━━━━━━━━━━━━\n\n` +
+      `"${item.quote}"\n\n` +
+      `📚 Sumber: ${item.chapterNumber} — ${item.chapterTitle}\n` +
+      `📑 Topik: ${item.subtopicTitle}\n` +
+      `🌟 Kitab Al-Masar — Syeikh Muhammad Ahmad Ar-Rasyid\n` +
+      `🌐 https://al-masar-dakwah.netlify.app/`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        showToast('Kata hikmah berjaya disalin! Sedia untuk dikongsi 💎');
+      }).catch(() => {
+        fallbackCopyText(textToCopy);
+      });
+    } else {
+      fallbackCopyText(textToCopy);
+    }
+  }
+
+  function fallbackCopyText(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      showToast('Kata hikmah berjaya disalin! Sedia untuk dikongsi 💎');
+    } catch (err) {
+      showToast('Gagal menyalin teks');
+    }
+    document.body.removeChild(textArea);
+  }
+
   // Initial Boot
-  setLayer(state.layer);
   renderSidebar();
-  navigateTo(0, 0);
+  if (state.layer === 'layer3') {
+    setLayer('layer3');
+  } else {
+    setLayer(state.layer);
+    navigateTo(0, 0);
+  }
 });

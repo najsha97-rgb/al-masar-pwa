@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v3';
+const CACHE_NAME = 'almasar-pwa-v4-20261015';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,8 @@ const ASSETS_TO_CACHE = [
   './js/app.js',
   './data/almasar_data.js',
   './data/almasar_data.json',
+  './data/almasar_quotes.js',
+  './data/almasar_quotes.json',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',
