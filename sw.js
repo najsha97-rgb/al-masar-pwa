@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v18-soalan-translation-20261019';
+const CACHE_NAME = 'almasar-pwa-v19-lauhah-infographic-20261019';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

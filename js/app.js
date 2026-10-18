@@ -221,6 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
       // LAYER 1: Full text paragraphs
       if (sub.paragraphs && sub.paragraphs.length > 0) {
         sub.paragraphs.forEach(para => {
+          const trimmed = para.trim();
+
+          // 1. Direct Custom HTML Block (e.g. Lauhah Khithathiyyah Infographic)
+          if (trimmed.startsWith('<div') || trimmed.startsWith('<section')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'custom-html-block';
+            wrapper.innerHTML = trimmed;
+            contentBody.appendChild(wrapper);
+            return;
+          }
+
           const p = document.createElement('p');
           
           // Check if contains Arabic
@@ -236,7 +247,27 @@ document.addEventListener('DOMContentLoaded', () => {
             p.className = 'quote-highlight-box';
             p.innerHTML = formatQuoteText(para);
           } else {
-            p.textContent = para;
+            // Check for numbered list item (e.g. 1. **Dua Peringkat...:** Penjelasan...)
+            const numMatch = para.match(/^(\d+)\.\s+\*\*(.*?)\*\*:?\s*(.*)$/);
+            if (numMatch) {
+              p.className = 'numbered-item-card';
+              const titleHtml = numMatch[2].replace(/\*(.*?)\*/g, '<em>$1</em>');
+              let descHtml = numMatch[3]
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+              p.innerHTML = `
+                <div class="num-card-badge">${numMatch[1]}</div>
+                <div class="num-card-content">
+                  <div class="num-card-title">${titleHtml}</div>
+                  <div class="num-card-desc">${descHtml}</div>
+                </div>
+              `;
+            } else {
+              // Standard paragraph with markdown formatting (bold, italic)
+              p.innerHTML = para
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+            }
           }
           contentBody.appendChild(p);
         });
