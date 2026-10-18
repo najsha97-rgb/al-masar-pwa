@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // Update dynamic counters
+  const promoSubEl = document.querySelector('.hikmah-promo-sub');
+  if (promoSubEl && allHikmahQuotes.length > 0) {
+    promoSubEl.textContent = allHikmahQuotes.length + " Kata Tokoh & Hadis Pejuang";
+  }
+
+
   // App State
   const state = {
     currentChapter: 0,
