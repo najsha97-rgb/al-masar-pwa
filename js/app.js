@@ -301,7 +301,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Paparan Jalur Mutiara Hikmah Bab / Bahagian Ini (jika ada mutiara hikmah berkaitan)
-    const currentSubQuotes = allHikmahQuotes.filter(q => q.chapterIndex === state.currentChapter && q.subtopicIndex === state.currentSubtopic);
+    const currentSubQuotes = allHikmahQuotes.filter(q => 
+      (q.subtopicId && q.subtopicId === sub.id) ||
+      (q.chapterIndex === state.currentChapter && q.subtopicIndex === state.currentSubtopic)
+    );
     if (currentSubQuotes.length > 0 && (state.layer === 'layer1' || state.layer === 'layer2')) {
       const chHikmahWrap = document.createElement('div');
       chHikmahWrap.className = 'chapter-hikmah-box';
