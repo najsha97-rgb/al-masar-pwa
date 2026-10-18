@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v15-notis-update-20261019';
+const CACHE_NAME = 'almasar-pwa-v16-clean-b13-summary-20261019';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
