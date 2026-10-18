@@ -224,10 +224,14 @@ document.addEventListener('DOMContentLoaded', () => {
           const p = document.createElement('p');
           
           // Check if contains Arabic
-          const hasArabic = /[\u0600-\u06FF]/.test(para);
-          if (hasArabic && para.length < 250) {
+          const arabicChars = (para.match(/[\u0600-\u06FF]/g) || []).length;
+          const latinChars = (para.match(/[a-zA-Z]/g) || []).length;
+          const isMainlyArabic = arabicChars > 0 && arabicChars >= latinChars;
+
+          if (isMainlyArabic) {
             p.className = 'arabic-text';
-            p.textContent = para;
+            const cleanText = para.replace(/^[>\s]+/, '');
+            p.textContent = cleanText;
           } else if (para.startsWith('“') || para.startsWith('"') || para.includes('berkata:') || para.includes('pesan:')) {
             p.className = 'quote-highlight-box';
             p.innerHTML = formatQuoteText(para);
