@@ -31,7 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     bookmarks: JSON.parse(localStorage.getItem('almasar_bookmarks') || '[]'),
     mobileNavOpen: false,
     activeSearchQuery: null,
-    activeMatchIndex: 0
+    activeMatchIndex: 0,
+    searchResults: [],
+    currentSearchResultIndex: -1
   };
 
   // DOM Elements
@@ -397,6 +399,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           focusSearchMatch(0);
         }, 180);
+      } else if (state.searchResults && state.searchResults.length > 0) {
+        // Kekalkan bar navigasi carian topik berbaki walaupun tiada padanan langsung dalam subtopik ini
+        showFloatingSearchToolbar(state.activeSearchQuery, 0);
       } else {
         removeFloatingSearchToolbar();
       }
@@ -513,6 +518,20 @@ document.addEventListener('DOMContentLoaded', () => {
   function showFloatingSearchToolbar(query, totalMatches) {
     removeFloatingSearchToolbar();
 
+    // Pastikan senarai hasil sentiasa diisi jika ada activeSearchQuery
+    if ((!state.searchResults || state.searchResults.length === 0) && query) {
+      performSearch(query);
+    }
+    const totalTopics = state.searchResults ? state.searchResults.length : 0;
+    let curTopicIdx = state.currentSearchResultIndex;
+    if (curTopicIdx < 0 && state.searchResults && state.searchResults.length > 0) {
+      curTopicIdx = state.searchResults.findIndex(r => r.chIdx === state.currentChapter && r.sIdx === state.currentSubtopic);
+      if (curTopicIdx >= 0) state.currentSearchResultIndex = curTopicIdx;
+    }
+
+    const hasMultiTopics = totalTopics > 0;
+    const topicLabel = hasMultiTopics ? `📋 Hasil (${Math.max(1, curTopicIdx + 1)}/${totalTopics})` : `📋 Hasil Carian`;
+
     const bar = document.createElement('div');
     bar.className = 'search-floating-bar';
     bar.id = 'searchFloatingBar';
@@ -520,12 +539,21 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="sfb-badge">
         <span class="sfb-icon">🔍</span>
         <span class="sfb-text">"<span class="sfb-query" title="${query}">${query}</span>"</span>
-        <span class="sfb-count" id="sfbCount">1/${totalMatches}</span>
+        <span class="sfb-count" id="sfbCount" title="Kedudukan baris dalam subtopik ini">${totalMatches > 0 ? `1/${totalMatches}` : `0/0`}</span>
       </div>
       <div class="sfb-actions">
-        <button class="sfb-btn" id="sfbPrevBtn" title="Sebelumnya" aria-label="Sebelumnya">▲</button>
-        <button class="sfb-btn" id="sfbNextBtn" title="Seterusnya" aria-label="Seterusnya">▼</button>
-        <button class="sfb-btn sfb-close-btn" id="sfbCloseBtn" title="Padam Sorotan" aria-label="Padam Sorotan">✕</button>
+        <button class="sfb-btn" id="sfbPrevBtn" title="Baris Sebelumnya Dalam Subtopik Ini" aria-label="Baris Sebelumnya" ${totalMatches <= 1 ? 'disabled' : ''}>▲</button>
+        <button class="sfb-btn" id="sfbNextBtn" title="Baris Seterusnya Dalam Subtopik Ini" aria-label="Baris Seterusnya" ${totalMatches <= 1 ? 'disabled' : ''}>▼</button>
+        
+        ${hasMultiTopics ? `
+          <div class="sfb-divider"></div>
+          <button class="sfb-topic-btn" id="sfbTopicListBtn" title="Buka Semula Senarai Semua ${totalTopics} Hasil Carian">${topicLabel}</button>
+          <button class="sfb-btn" id="sfbPrevTopicBtn" title="Subtopik Hasil Carian Sebelumnya" aria-label="Subtopik Sebelumnya" ${curTopicIdx <= 0 ? 'disabled' : ''}>⏮</button>
+          <button class="sfb-btn" id="sfbNextTopicBtn" title="Subtopik Hasil Carian Seterusnya" aria-label="Subtopik Seterusnya" ${curTopicIdx >= totalTopics - 1 ? 'disabled' : ''}>⏭</button>
+        ` : ''}
+
+        <div class="sfb-divider"></div>
+        <button class="sfb-btn sfb-close-btn" id="sfbCloseBtn" title="Padam Sorotan & Tutup" aria-label="Padam Sorotan">✕</button>
       </div>
     `;
 
@@ -533,6 +561,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const prevBtn = bar.querySelector('#sfbPrevBtn');
     const nextBtn = bar.querySelector('#sfbNextBtn');
+    const topicListBtn = bar.querySelector('#sfbTopicListBtn');
+    const prevTopicBtn = bar.querySelector('#sfbPrevTopicBtn');
+    const nextTopicBtn = bar.querySelector('#sfbNextTopicBtn');
     const closeBtn = bar.querySelector('#sfbCloseBtn');
 
     if (prevBtn) {
@@ -549,10 +580,47 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    if (topicListBtn) {
+      topicListBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.searchResults && state.searchResults.length > 0) {
+          renderSearchResults(state.searchResults, state.activeSearchQuery);
+        } else if (state.activeSearchQuery) {
+          performSearch(state.activeSearchQuery);
+        }
+        searchOverlay.classList.add('open');
+      });
+    }
+
+    if (prevTopicBtn) {
+      prevTopicBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.searchResults && curTopicIdx > 0) {
+          const prevRes = state.searchResults[curTopicIdx - 1];
+          state.currentSearchResultIndex = curTopicIdx - 1;
+          navigateTo(prevRes.chIdx, prevRes.sIdx, prevRes.targetLayer || 'layer1');
+        }
+      });
+    }
+
+    if (nextTopicBtn) {
+      nextTopicBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.searchResults && curTopicIdx < totalTopics - 1) {
+          const nextRes = state.searchResults[curTopicIdx + 1];
+          state.currentSearchResultIndex = curTopicIdx + 1;
+          navigateTo(nextRes.chIdx, nextRes.sIdx, nextRes.targetLayer || 'layer1');
+        }
+      });
+    }
+
     if (closeBtn) {
       closeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         state.activeSearchQuery = null;
+        state.searchResults = [];
+        state.currentSearchResultIndex = -1;
+        searchInput.value = '';
         removeFloatingSearchToolbar();
         removeHighlightsInElement(contentBody);
       });
