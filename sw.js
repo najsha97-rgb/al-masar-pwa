@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v30-apostrophe-agnostic-search-20261019';
+const CACHE_NAME = 'almasar-pwa-v31-bab8-kaedah5-update-20261019';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
