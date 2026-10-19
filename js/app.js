@@ -1202,7 +1202,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `📚 Sumber: ${item.chapterNumber} — ${item.chapterTitle}\n` +
       `📑 Topik: ${item.subtopicTitle}\n` +
       `🌟 Kitab Al-Masar — Syeikh Muhammad Ahmad Ar-Rasyid\n` +
-      `🌐 https://al-masar-dakwah.netlify.app/`;
+      `🌐 https://najsha97-rgb.github.io/al-masar-pwa/`;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(textToCopy).then(() => {
