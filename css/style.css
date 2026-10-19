@@ -2008,3 +2008,174 @@ body {
   flex-shrink: 0;
   margin-top: 2px;
 }
+
+
+/* ==========================================================================
+   IN-PAGE SEARCH HIGHLIGHTING & FLOATING NAVIGATOR BAR (Kajian & Penyelidikan)
+   ========================================================================== */
+
+/* Sorotan Kata Kunci Dalam Teks (Search Match) */
+mark.content-search-match {
+  background: rgba(245, 158, 11, 0.38) !important;
+  color: #fef08a !important;
+  font-weight: 600 !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  border-bottom: 2px solid #f59e0b !important;
+  transition: all 0.25s ease !important;
+  scroll-margin-top: 140px !important;
+  display: inline !important;
+}
+
+[data-theme="light"] mark.content-search-match {
+  background: #fef08a !important;
+  color: #78350f !important;
+  border-bottom: 2px solid #d97706 !important;
+}
+
+/* Sorotan Aktif Semasa (Focused Match) */
+mark.content-search-match.active-match {
+  background: #f59e0b !important;
+  color: #0b172a !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.55), 0 0 18px rgba(245, 158, 11, 0.75) !important;
+  font-weight: 700 !important;
+  animation: searchMatchPulse 1.2s infinite alternate !important;
+}
+
+@keyframes searchMatchPulse {
+  0% { filter: brightness(1); }
+  100% { filter: brightness(1.25); }
+}
+
+/* Palang Terapung Navigasi Carian (Floating Search Navigator) */
+.search-floating-bar {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(14, 28, 58, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), 0 0 25px rgba(245, 158, 11, 0.25);
+  padding: 8px 16px;
+  border-radius: 40px;
+  z-index: 1000;
+  animation: sfbSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #f8fafc;
+  font-family: inherit;
+  max-width: 90vw;
+}
+
+[data-theme="light"] .search-floating-bar {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(217, 119, 6, 0.45);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15), 0 0 20px rgba(217, 119, 6, 0.2);
+  color: #0f172a;
+}
+
+@keyframes sfbSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 25px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.sfb-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.sfb-query {
+  font-weight: 700;
+  color: #fbbf24;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+[data-theme="light"] .sfb-query {
+  color: #d97706;
+}
+
+.sfb-count {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="light"] .sfb-count {
+  background: rgba(217, 119, 6, 0.15);
+  color: #b45309;
+  border-color: rgba(217, 119, 6, 0.25);
+}
+
+.sfb-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sfb-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f1f5f9;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+[data-theme="light"] .sfb-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #1e293b;
+}
+
+.sfb-btn:hover {
+  background: rgba(245, 158, 11, 0.35);
+  border-color: #f59e0b;
+  color: #fbbf24;
+  transform: scale(1.1);
+}
+
+.sfb-close-btn:hover {
+  background: rgba(239, 68, 68, 0.3) !important;
+  border-color: #ef4444 !important;
+  color: #fca5a5 !important;
+}
+
+@media (max-width: 640px) {
+  .search-floating-bar {
+    bottom: 78px;
+    padding: 6px 12px;
+    gap: 8px;
+  }
+  .sfb-badge {
+    font-size: 0.8rem;
+  }
+  .sfb-query {
+    max-width: 90px;
+  }
+}

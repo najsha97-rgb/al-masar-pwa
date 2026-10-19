@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     theme: localStorage.getItem('almasar_theme') || 'dark',
     fontSize: parseFloat(localStorage.getItem('almasar_fontsize') || '1.05'),
     bookmarks: JSON.parse(localStorage.getItem('almasar_bookmarks') || '[]'),
-    mobileNavOpen: false
+    mobileNavOpen: false,
+    activeSearchQuery: null,
+    activeMatchIndex: 0
   };
 
   // DOM Elements
@@ -333,6 +335,175 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update Bottom Navigation buttons
     updateBottomNav();
+
+    // Sorotan Carian Dalam Laman & Navigasi Baris (In-Page Search Highlight)
+    if (state.activeSearchQuery && (state.layer === 'layer1' || state.layer === 'layer2')) {
+      const matchCount = highlightTextInElement(contentBody, state.activeSearchQuery);
+      if (matchCount > 0) {
+        showFloatingSearchToolbar(state.activeSearchQuery, matchCount);
+        setTimeout(() => {
+          focusSearchMatch(0);
+        }, 180);
+      } else {
+        removeFloatingSearchToolbar();
+      }
+    } else {
+      removeFloatingSearchToolbar();
+    }
+  }
+
+  // ================= IN-PAGE SEARCH HIGHLIGHTING (Penyelidikan Lapangan) =================
+  function highlightTextInElement(element, query) {
+    if (!query || !element) return 0;
+    removeHighlightsInElement(element);
+
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+
+    const textNodes = [];
+    const walk = document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function(node) {
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          const parent = node.parentElement;
+          if (parent && (
+            parent.tagName === 'SCRIPT' ||
+            parent.tagName === 'STYLE' ||
+            parent.classList.contains('content-search-match') ||
+            parent.classList.contains('chapter-hikmah-box') ||
+            parent.closest('.chapter-hikmah-box')
+          )) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    let node;
+    while ((node = walk.nextNode())) {
+      if (regex.test(node.nodeValue)) {
+        textNodes.push(node);
+      }
+      regex.lastIndex = 0;
+    }
+
+    let matchCount = 0;
+    textNodes.forEach(tNode => {
+      const parent = tNode.parentNode;
+      if (!parent) return;
+      const text = tNode.nodeValue;
+      const parts = text.split(regex);
+
+      const fragment = document.createDocumentFragment();
+      for (let i = 0; i < parts.length; i++) {
+        if (regex.test(parts[i])) {
+          const mark = document.createElement('mark');
+          mark.className = 'content-search-match';
+          mark.setAttribute('data-match-idx', matchCount);
+          mark.textContent = parts[i];
+          fragment.appendChild(mark);
+          matchCount++;
+        } else if (parts[i]) {
+          fragment.appendChild(document.createTextNode(parts[i]));
+        }
+        regex.lastIndex = 0;
+      }
+      parent.replaceChild(fragment, tNode);
+    });
+
+    return matchCount;
+  }
+
+  function removeHighlightsInElement(element) {
+    if (!element) return;
+    const marks = element.querySelectorAll('mark.content-search-match');
+    marks.forEach(mark => {
+      const parent = mark.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(mark.textContent), mark);
+        parent.normalize();
+      }
+    });
+  }
+
+  function focusSearchMatch(idx) {
+    const marks = contentBody.querySelectorAll('mark.content-search-match');
+    if (!marks || marks.length === 0) return;
+
+    marks.forEach(m => m.classList.remove('active-match'));
+
+    const safeIdx = (idx + marks.length) % marks.length;
+    state.activeMatchIndex = safeIdx;
+
+    const targetMark = marks[safeIdx];
+    if (targetMark) {
+      targetMark.classList.add('active-match');
+      targetMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    const countEl = document.getElementById('sfbCount');
+    if (countEl) {
+      countEl.textContent = `${safeIdx + 1}/${marks.length}`;
+    }
+  }
+
+  function showFloatingSearchToolbar(query, totalMatches) {
+    removeFloatingSearchToolbar();
+
+    const bar = document.createElement('div');
+    bar.className = 'search-floating-bar';
+    bar.id = 'searchFloatingBar';
+    bar.innerHTML = `
+      <div class="sfb-badge">
+        <span class="sfb-icon">🔍</span>
+        <span class="sfb-text">"<span class="sfb-query" title="${query}">${query}</span>"</span>
+        <span class="sfb-count" id="sfbCount">1/${totalMatches}</span>
+      </div>
+      <div class="sfb-actions">
+        <button class="sfb-btn" id="sfbPrevBtn" title="Sebelumnya" aria-label="Sebelumnya">▲</button>
+        <button class="sfb-btn" id="sfbNextBtn" title="Seterusnya" aria-label="Seterusnya">▼</button>
+        <button class="sfb-btn sfb-close-btn" id="sfbCloseBtn" title="Padam Sorotan" aria-label="Padam Sorotan">✕</button>
+      </div>
+    `;
+
+    document.body.appendChild(bar);
+
+    const prevBtn = bar.querySelector('#sfbPrevBtn');
+    const nextBtn = bar.querySelector('#sfbNextBtn');
+    const closeBtn = bar.querySelector('#sfbCloseBtn');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        focusSearchMatch(state.activeMatchIndex - 1);
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        focusSearchMatch(state.activeMatchIndex + 1);
+      });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.activeSearchQuery = null;
+        removeFloatingSearchToolbar();
+        removeHighlightsInElement(contentBody);
+      });
+    }
+  }
+
+  function removeFloatingSearchToolbar() {
+    const existing = document.getElementById('searchFloatingBar');
+    if (existing) {
+      existing.remove();
+    }
   }
 
   function formatQuoteText(text) {
@@ -546,6 +717,19 @@ document.addEventListener('DOMContentLoaded', () => {
     performSearch(query);
   });
 
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const query = e.target.value.trim().toLowerCase();
+      if (query.length >= 2) {
+        performSearch(query);
+        const firstItem = searchResultsList.querySelector('.search-result-item');
+        if (firstItem) {
+          firstItem.click();
+        }
+      }
+    }
+  });
+
   function performSearch(query) {
     const results = [];
 
@@ -611,6 +795,8 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         item.addEventListener('click', () => {
           searchOverlay.classList.remove('open');
+          state.activeSearchQuery = query;
+          state.activeMatchIndex = 0;
           searchInput.value = '';
           navigateTo(res.chIdx, res.sIdx);
         });
