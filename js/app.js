@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const readerArea = document.getElementById('readerArea');
   const heroCard = document.getElementById('heroCard');
   const readerContainer = document.getElementById('readerContainer');
+  const contentBody = document.getElementById('contentBody');
   
   const layerBtnLengkap = document.getElementById('btnLayerLengkap');
   const layerBtnRingkasan = document.getElementById('btnLayerRingkasan');
@@ -136,7 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
       currentNavItem.classList.add('open');
     }
   }  // 5. Navigate to Chapter and Subtopic
-  function navigateTo(chIdx, sIdx) {
+  function navigateTo(chIdx, sIdx, targetLayer = null) {
+    state.currentChapter = chIdx;
+    state.currentSubtopic = sIdx;
+
+    if (targetLayer && (targetLayer === 'layer1' || targetLayer === 'layer2')) {
+      state.layer = targetLayer;
+      localStorage.setItem('almasar_layer', targetLayer);
+      layerBtnLengkap.classList.toggle('active', targetLayer === 'layer1');
+      layerBtnRingkasan.classList.toggle('active', targetLayer === 'layer2');
+      if (layerBtnHikmah) layerBtnHikmah.classList.remove('active');
+    }
     state.currentChapter = chIdx;
     state.currentSubtopic = sIdx;
 
@@ -338,7 +349,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sorotan Carian Dalam Laman & Navigasi Baris (In-Page Search Highlight)
     if (state.activeSearchQuery && (state.layer === 'layer1' || state.layer === 'layer2')) {
-      const matchCount = highlightTextInElement(contentBody, state.activeSearchQuery);
+      let matchCount = highlightTextInElement(contentBody, state.activeSearchQuery);
+
+      // Jika tiada padanan dalam mod semasa, semak mod satu lagi secara automatik
+      if (matchCount === 0) {
+        const otherLayer = (state.layer === 'layer1') ? 'layer2' : 'layer1';
+        const ch = data.chapters[state.currentChapter];
+        const sub = ch ? ch.subtopics[state.currentSubtopic] : null;
+        let foundInOther = false;
+
+        if (sub) {
+          if (otherLayer === 'layer2') {
+            if ((sub.summary || '').toLowerCase().includes(state.activeSearchQuery.toLowerCase())) {
+              foundInOther = true;
+            }
+          } else {
+            if (sub.paragraphs && sub.paragraphs.some(p => p.toLowerCase().includes(state.activeSearchQuery.toLowerCase()))) {
+              foundInOther = true;
+            }
+          }
+        }
+
+        if (foundInOther) {
+          setLayer(otherLayer);
+          showToast(`Kata kunci ditemui dalam ${otherLayer === 'layer2' ? 'Ringkasan Eksklusif' : 'Versi Lengkap'}`);
+          return;
+        }
+      }
+
       if (matchCount > 0) {
         showFloatingSearchToolbar(state.activeSearchQuery, matchCount);
         setTimeout(() => {
@@ -441,6 +479,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const targetMark = marks[safeIdx];
     if (targetMark) {
       targetMark.classList.add('active-match');
+
+      // Auto-buka details / accordion jika match berada di dalamnya
+      const parentDetails = targetMark.closest('details');
+      if (parentDetails) {
+        parentDetails.open = true;
+      }
+
       targetMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
@@ -740,6 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
           results.push({
             chIdx,
             sIdx,
+            targetLayer: 'layer1',
             title: `${ch.number}: ${sub.title}`,
             snippet: `Tajuk sepadan: ${sub.title}`,
             chTitle: ch.title
@@ -756,6 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
               results.push({
                 chIdx,
                 sIdx,
+                targetLayer: 'layer1',
                 title: `${ch.number}: ${sub.title}`,
                 snippet: highlightText(snippet, query),
                 chTitle: ch.title
@@ -806,7 +853,7 @@ document.addEventListener('DOMContentLoaded', () => {
           state.searchResults = results;
           state.currentSearchResultIndex = rIdx;
           searchInput.value = query;
-          navigateTo(res.chIdx, res.sIdx);
+          navigateTo(res.chIdx, res.sIdx, res.targetLayer);
         });
         searchResultsList.appendChild(item);
       });
