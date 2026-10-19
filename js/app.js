@@ -5,8 +5,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Data Initialization
-  const data = window.ALMASAR_DATA || null;
-  const allHikmahQuotes = window.ALMASAR_QUOTES || [];
+  const data = (typeof window !== 'undefined' && window.ALMASAR_DATA)
+    || (typeof ALMASAR_DATA !== 'undefined' ? ALMASAR_DATA : null);
+  const allHikmahQuotes = (typeof window !== 'undefined' && window.ALMASAR_QUOTES)
+    || (typeof ALMASAR_QUOTES !== 'undefined' ? ALMASAR_QUOTES : []);
   if (!data) {
     console.error('Data Al-Masar tidak dijumpai!');
     return;
@@ -72,7 +74,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. Register Service Worker for PWA
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Service Worker Registered:', reg.scope))
+      .then(reg => {
+        console.log('Service Worker Registered:', reg.scope);
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('Versi baharu Al-Masar dikesan, memuat semula...');
+                window.location.reload();
+              }
+            });
+          }
+        });
+      })
       .catch(err => console.log('Service Worker Failed:', err));
   }
 

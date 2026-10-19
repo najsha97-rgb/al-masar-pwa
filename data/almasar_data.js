@@ -1,4 +1,4 @@
-const ALMASAR_DATA = {
+var ALMASAR_DATA = {
   "metadata": {
     "title": "Al-Masar (المسار)",
     "subtitle": "Strategi, Polisi & Fiqh Perancangan Dakwah Harakah Islamiyah",
@@ -4213,3 +4213,11 @@ const ALMASAR_DATA = {
     }
   ]
 };
+
+
+if (typeof window !== "undefined") {
+  window.ALMASAR_DATA = ALMASAR_DATA;
+}
+if (typeof module !== "undefined") {
+  module.exports = ALMASAR_DATA;
+}
