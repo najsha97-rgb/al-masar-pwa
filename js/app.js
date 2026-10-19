@@ -767,6 +767,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    state.searchResults = results;
+    state.activeSearchQuery = query;
     renderSearchResults(results, query);
   }
 
@@ -786,18 +788,24 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
     } else {
-      results.forEach(res => {
+      results.forEach((res, rIdx) => {
+        const isCurrentReading = (res.chIdx === state.currentChapter && res.sIdx === state.currentSubtopic);
         const item = document.createElement('div');
-        item.className = 'search-result-item';
+        item.className = 'search-result-item' + (isCurrentReading ? ' active-reading' : '');
         item.innerHTML = `
-          <div class="search-result-title">${res.title}</div>
+          <div class="search-result-title">
+            ${res.title}
+            ${isCurrentReading ? '<span class="search-result-current-badge">Sedang Dibaca 📖</span>' : ''}
+          </div>
           <div class="search-result-snippet">...${res.snippet}...</div>
         `;
         item.addEventListener('click', () => {
           searchOverlay.classList.remove('open');
           state.activeSearchQuery = query;
           state.activeMatchIndex = 0;
-          searchInput.value = '';
+          state.searchResults = results;
+          state.currentSearchResultIndex = rIdx;
+          searchInput.value = query;
           navigateTo(res.chIdx, res.sIdx);
         });
         searchResultsList.appendChild(item);
@@ -806,6 +814,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchOverlay.classList.add('open');
   }
+
+
+  // Re-open search when clicking searchInput if query exists
+  searchInput.addEventListener('focus', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (q.length >= 2) {
+      performSearch(q);
+    } else if (state.activeSearchQuery && state.activeSearchQuery.length >= 2) {
+      searchInput.value = state.activeSearchQuery;
+      performSearch(state.activeSearchQuery);
+    }
+  });
 
   closeSearchBtn.addEventListener('click', () => {
     searchOverlay.classList.remove('open');
