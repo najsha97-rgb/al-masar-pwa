@@ -15,9 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Update dynamic counters
+  const promoTitleEl = document.querySelector('.hikmah-promo-title');
   const promoSubEl = document.querySelector('.hikmah-promo-sub');
-  if (promoSubEl && allHikmahQuotes.length > 0) {
-    promoSubEl.textContent = allHikmahQuotes.length + " Kata Tokoh & Hadis Pejuang";
+  if (promoTitleEl && allHikmahQuotes.length > 0) {
+    promoTitleEl.textContent = `${allHikmahQuotes.length} Mutiara Kata`;
+  }
+  if (promoSubEl) {
+    promoSubEl.textContent = "(Hadis Nabi SAW + Tokoh & Pejuang)";
   }
 
 
@@ -215,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('subtopicMainTitle').textContent = 'Mutiara Hikmah & Kata-Kata Tokoh';
 
       const modeBadge = document.getElementById('activeModeBadge');
-      modeBadge.textContent = `Koleksi ${allHikmahQuotes.length} Mutiara Hikmah (Nukilan Tokoh Salaf, Hadis & Taujih Ar-Rasyid)`;
+      modeBadge.textContent = `${allHikmahQuotes.length} Mutiara Kata (Hadis Nabi SAW + Tokoh & Pejuang)`;
 
       updateBookmarkBtnStatus();
       const contentBody = document.getElementById('contentBody');
@@ -1263,7 +1267,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function copyHikmahToClipboard(item) {
-    const textToCopy = `💎 MUTIARA HIKMAH DAKWAH\n` +
+    const textToCopy = `💎 ${allHikmahQuotes.length} MUTIARA KATA\n(Hadis Nabi SAW + Tokoh & Pejuang)\n` +
       `👤 ${item.speaker}\n` +
       `━━━━━━━━━━━━━━━━━━━\n\n` +
       `"${item.quote}"\n\n` +
