@@ -396,8 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
     removeHighlightsInElement(element);
 
     const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(${escaped})`, 'gi');
-
+    const flexible = escaped.replace(/['\u2018\u2019\u02bb\u02bc`]/g, "['\\u2018\\u2019\\u02bb\\u02bc`]");
+    const regex = new RegExp(`(${flexible})`, 'gi');
     const textNodes = [];
     const walk = document.createTreeWalker(
       element,
@@ -775,8 +775,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function normalizeSearchText(str) {
+    return (str || '')
+      .toLowerCase()
+      .replace(/[\u2018\u2019\u02bb\u02bc`]/g, "'");
+  }
+
+  function getApostropheRegex(query) {
+    const escaped = (query || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const flexible = escaped.replace(/['\u2018\u2019\u02bb\u02bc`]/g, "['\\u2018\\u2019\\u02bb\\u02bc`]");
+    return new RegExp(`(${flexible})`, 'gi');
+  }
+
   function performSearch(query) {
     const results = [];
+    const normQuery = normalizeSearchText(query);
+    if (!normQuery) return;
 
     data.chapters.forEach((ch, chIdx) => {
       ch.subtopics.forEach((sub, sIdx) => {
@@ -785,8 +799,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. KEUTAMAAN UTAMA (DEFAULT): Versi Penuh (Layer 1)
         if (sub.paragraphs) {
           for (let p of sub.paragraphs) {
-            if (p.toLowerCase().includes(query)) {
-              const startIdx = Math.max(0, p.toLowerCase().indexOf(query) - 40);
+            const normP = normalizeSearchText(p);
+            if (normP.includes(normQuery)) {
+              const startIdx = Math.max(0, normP.indexOf(normQuery) - 40);
               const snippet = p.substring(startIdx, startIdx + 140);
               results.push({
                 chIdx,
@@ -804,7 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Semak tajuk subtopik jika belum jumpa dalam perenggan
-        if (!foundInParas && sub.title.toLowerCase().includes(query)) {
+        if (!foundInParas && normalizeSearchText(sub.title).includes(normQuery)) {
           results.push({
             chIdx,
             sIdx,
@@ -819,8 +834,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. KEUTAMAAN KEDUA: Ringkasan Eksklusif (Layer 2)
         // Hanya jika kata kunci TIDAK ditemui dalam Versi Penuh
-        if (!foundInParas && sub.summary && sub.summary.toLowerCase().includes(query)) {
-          const startIdx = Math.max(0, sub.summary.toLowerCase().indexOf(query) - 40);
+        if (!foundInParas && sub.summary && normalizeSearchText(sub.summary).includes(normQuery)) {
+          const normSum = normalizeSearchText(sub.summary);
+          const startIdx = Math.max(0, normSum.indexOf(normQuery) - 40);
           const snippet = sub.summary.substring(startIdx, startIdx + 140);
           results.push({
             chIdx,
@@ -841,7 +857,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function highlightText(text, query) {
-    const regex = new RegExp(`(${query})`, 'gi');
+    if (!text || !query) return text || '';
+    const regex = getApostropheRegex(query);
     return text.replace(regex, '<mark>$1</mark>');
   }
 
