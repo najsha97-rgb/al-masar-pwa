@@ -780,20 +780,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     data.chapters.forEach((ch, chIdx) => {
       ch.subtopics.forEach((sub, sIdx) => {
-        // Search in title
-        if (sub.title.toLowerCase().includes(query)) {
-          results.push({
-            chIdx,
-            sIdx,
-            targetLayer: 'layer1',
-            title: `${ch.number}: ${sub.title}`,
-            snippet: `Tajuk sepadan: ${sub.title}`,
-            chTitle: ch.title
-          });
-          return;
-        }
+        let foundInParas = false;
 
-        // Search in paragraphs
+        // 1. KEUTAMAAN UTAMA (DEFAULT): Versi Penuh (Layer 1)
         if (sub.paragraphs) {
           for (let p of sub.paragraphs) {
             if (p.toLowerCase().includes(query)) {
@@ -803,13 +792,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 chIdx,
                 sIdx,
                 targetLayer: 'layer1',
+                layerLabel: 'Versi Penuh',
                 title: `${ch.number}: ${sub.title}`,
                 snippet: highlightText(snippet, query),
                 chTitle: ch.title
               });
+              foundInParas = true;
               break;
             }
           }
+        }
+
+        // Semak tajuk subtopik jika belum jumpa dalam perenggan
+        if (!foundInParas && sub.title.toLowerCase().includes(query)) {
+          results.push({
+            chIdx,
+            sIdx,
+            targetLayer: 'layer1',
+            layerLabel: 'Versi Penuh',
+            title: `${ch.number}: ${sub.title}`,
+            snippet: `Tajuk sepadan: ${sub.title}`,
+            chTitle: ch.title
+          });
+          foundInParas = true;
+        }
+
+        // 2. KEUTAMAAN KEDUA: Ringkasan Eksklusif (Layer 2)
+        // Hanya jika kata kunci TIDAK ditemui dalam Versi Penuh
+        if (!foundInParas && sub.summary && sub.summary.toLowerCase().includes(query)) {
+          const startIdx = Math.max(0, sub.summary.toLowerCase().indexOf(query) - 40);
+          const snippet = sub.summary.substring(startIdx, startIdx + 140);
+          results.push({
+            chIdx,
+            sIdx,
+            targetLayer: 'layer2',
+            layerLabel: 'Ringkasan',
+            title: `${ch.number}: ${sub.title}`,
+            snippet: highlightText(snippet, query),
+            chTitle: ch.title
+          });
         }
       });
     });
@@ -837,14 +858,24 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       results.forEach((res, rIdx) => {
         const isCurrentReading = (res.chIdx === state.currentChapter && res.sIdx === state.currentSubtopic);
+        const isLayer1 = (res.targetLayer !== 'layer2');
+        const badgeClass = isLayer1 ? 'badge-layer1' : 'badge-layer2';
+        const badgeText = isLayer1 ? '📖 Versi Penuh' : '📑 Ringkasan';
+
         const item = document.createElement('div');
         item.className = 'search-result-item' + (isCurrentReading ? ' active-reading' : '');
+        item.style.padding = '12px';
+        item.style.borderBottom = '1px solid var(--border-card)';
+        item.style.cursor = 'pointer';
         item.innerHTML = `
-          <div class="search-result-title">
-            ${res.title}
-            ${isCurrentReading ? '<span class="search-result-current-badge">Sedang Dibaca 📖</span>' : ''}
+          <div class="search-result-title" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+            <span>${res.title}</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="search-layer-badge ${badgeClass}">${badgeText}</span>
+              ${isCurrentReading ? '<span class="search-result-current-badge">Sedang Dibaca 📖</span>' : ''}
+            </div>
           </div>
-          <div class="search-result-snippet">...${res.snippet}...</div>
+          <div class="search-result-snippet" style="margin-top: 6px;">...${res.snippet}...</div>
         `;
         item.addEventListener('click', () => {
           searchOverlay.classList.remove('open');
@@ -853,7 +884,10 @@ document.addEventListener('DOMContentLoaded', () => {
           state.searchResults = results;
           state.currentSearchResultIndex = rIdx;
           searchInput.value = query;
-          navigateTo(res.chIdx, res.sIdx, res.targetLayer);
+
+          // Default ke targetLayer (Versi Penuh didahulukan)
+          const chosenLayer = res.targetLayer || 'layer1';
+          navigateTo(res.chIdx, res.sIdx, chosenLayer);
         });
         searchResultsList.appendChild(item);
       });
@@ -861,18 +895,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchOverlay.classList.add('open');
   }
-
-
-  // Re-open search when clicking searchInput if query exists
-  searchInput.addEventListener('focus', () => {
-    const q = searchInput.value.trim().toLowerCase();
-    if (q.length >= 2) {
-      performSearch(q);
-    } else if (state.activeSearchQuery && state.activeSearchQuery.length >= 2) {
-      searchInput.value = state.activeSearchQuery;
-      performSearch(state.activeSearchQuery);
-    }
-  });
 
   closeSearchBtn.addEventListener('click', () => {
     searchOverlay.classList.remove('open');
