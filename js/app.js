@@ -748,14 +748,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function formatQuoteText(text) {
+    if (!text) return '';
+    // Protect HTML tags (especially <span class="fn-ref"...> so attributes like title are untouched)
+    const tokens = [];
+    let formatted = text.replace(/<[^>]+>/g, (match) => {
+      tokens.push(match);
+      return `___HTML_TOKEN_${tokens.length - 1}___`;
+    });
+
     // Highlight potential names (dengan ejaan standard kemas kini)
-    const names = ['Imam Hasan al-Banna', 'Hasan al-Banna', 'Sayyid Qutb', 'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Ibnu Taimiyah', 'Imam Ahmad', 'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 'Rasulullah saw', 'Rasulullah SAW', 'Nabi saw', 'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'];
-    let formatted = text;
+    const names = [
+      'Imam Hasan al-Banna', 'Hasan al-Banna', 'Sayyid Qutb', 
+      'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 
+      'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Imam Ahmad', 
+      'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 
+      'Rasulullah saw', 'Rasulullah SAW', 'Nabi saw', 
+      'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'
+    ];
     names.forEach(name => {
       const regex = new RegExp(`(${name})`, 'gi');
       formatted = formatted.replace(regex, '<span class="tokoh-name">$1</span>');
     });
-    return formatted;
+
+    // Restore protected HTML tags
+    return formatted.replace(/___HTML_TOKEN_(\d+)___/g, (_, i) => tokens[parseInt(i, 10)]);
   }
 
   // 7. Bottom Navigation (Prev / Next)
