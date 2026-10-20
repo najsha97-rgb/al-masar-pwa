@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v45-ceritafix-20261020';
+const CACHE_NAME = 'almasar-pwa-v46-bab234fn-20261020';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
