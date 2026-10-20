@@ -839,7 +839,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Prinsip-Prinsip Perancangan Haraki",
     "subtopicId": "c17_s2",
     "subtopicTitle": "Mazhab Pedang Golongan Salaf",
-    "speaker": "Jabir bin Abdillah r.a. / Ibnu Taimiyah",
+    "speaker": "Jabir bin Abdillah RA / Ibnu Taimiyah",
     "quote": "« أمرنا رسول الله صلى الله عليه وسلم أن نضرب بهذا - يعنى السيف - من خرج عن هذا - يعنى المصحف »\n\n\"Rasulullah sallallahu 'alaihi wasallam telah memerintahkan kami agar kami memukul dengan ini (pedang) sesiapa yang keluar menyimpang daripada ini (mushaf Al-Quran).\"",
     "category": "sahabat",
     "source": "Al-Masar, Bab 17",
@@ -1957,7 +1957,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Cakupan Himmah Yang Tinggi",
     "subtopicTitle": "Pengenalan & Mukadimah Bab",
     "speaker": "As-Syeikh Muhammad Ahmad Ar-Rasyid",
-    "quote": "Hakikat Sakinah Para Nabi:** Para Rasul dan sahabat r.a. menghadapi ancaman musuh yang dahsyat dengan ketenangan hati yang membuahkan keberanian melangkah ke medan maut tanpa gementar.",
+    "quote": "Hakikat Sakinah Para Nabi:** Para Rasul dan sahabat RA menghadapi ancaman musuh yang dahsyat dengan ketenangan hati yang membuahkan keberanian melangkah ke medan maut tanpa gementar.",
     "category": "rasyid"
   },
   {
@@ -2089,7 +2089,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Dialog Pendakwah Perunding",
     "subtopicTitle": "Kita Adalah Pemilik Taqwa Dan Peradaban Terpilih",
     "speaker": "Sayyidina Ja'far bin Abi Thalib RA",
-    "quote": "Ibrah Sirah Para Sahabat di Hadapan Raja Najasyi:** Ketokohan Ja'far bin Abi Thalib r.a. di hadapan Najasyi membuktikan kemenangan adab, kefasihan hujah, dan ketakwaan mengatasi fitnah delegasi Quraisy.",
+    "quote": "Ibrah Sirah Para Sahabat di Hadapan Raja Najasyi:** Ketokohan Ja'far bin Abi Thalib RA di hadapan Najasyi membuktikan kemenangan adab, kefasihan hujah, dan ketakwaan mengatasi fitnah delegasi Quraisy.",
     "category": "sahabat"
   },
   {
@@ -2173,7 +2173,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Kelahiran Pertama",
     "subtopicTitle": "Kita Berwaspada Terhadap Senjata Pengecut",
     "speaker": "As-Syeikh Muhammad Ahmad Ar-Rasyid",
-    "quote": "Ibrah Peristiwa Haditsul Ifk (Tuduhan Jahat ke atas Ummul Mukminin Aisyah r.a.):** Bagaimana kaum munafik menggunakan fitnah kehormatan untuk meruntuhkan moral kepimpinan Islam, dan bagaimana wahyu membersihkan nama suci Aisyah r.a.",
+    "quote": "Ibrah Peristiwa Haditsul Ifk (Tuduhan Jahat ke atas Ummul Mukminin Aisyah RA):** Bagaimana kaum munafik menggunakan fitnah kehormatan untuk meruntuhkan moral kepimpinan Islam, dan bagaimana wahyu membersihkan nama suci Aisyah RA",
     "category": "rasyid"
   },
   {
@@ -2365,7 +2365,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Mengembangkan Layar",
     "subtopicTitle": "Ke Arah Keaslian… Tanpa Berbelit-belit",
     "speaker": "Sayyidina Ja'far bin Abi Thalib RA",
-    "quote": "Ibrah Dialog Ja'far bin Abi Talib r.a. di Hadapan Raja Najasyi:** Ketegasan dan kelancaran Ja'far menerangkan hakikat Islam dan kebobrokan jahiliah secara terus-terang tanpa berbelit-belit.",
+    "quote": "Ibrah Dialog Ja'far bin Abi Talib RA di Hadapan Raja Najasyi:** Ketegasan dan kelancaran Ja'far menerangkan hakikat Islam dan kebobrokan jahiliah secara terus-terang tanpa berbelit-belit.",
     "category": "sahabat"
   },
   {
@@ -2377,7 +2377,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Mengembangkan Layar",
     "subtopicTitle": "Kesamaan Irama",
     "speaker": "Sabda Rasulullah SAW",
-    "quote": "Ibrah Perisikan Khabbab & Huzaifah Ibn al-Yaman r.a.:** Rasulullah SAW melantik sahabat tertentu untuk memantau risikan musuh dan menyelaraskan maklumat sebelum membuat keputusan ketenteraan dan diplomasi.",
+    "quote": "Ibrah Perisikan Khabbab & Huzaifah Ibn al-Yaman RA:** Rasulullah SAW melantik sahabat tertentu untuk memantau risikan musuh dan menyelaraskan maklumat sebelum membuat keputusan ketenteraan dan diplomasi.",
     "category": "hadis"
   },
   {
@@ -2821,7 +2821,7 @@ var ALMASAR_QUOTES = [
     "chapterTitle": "Laluan dan Pendalaman",
     "subtopicTitle": "Kewajipan keempat: Membina gerombolan kanak-kanak Islam.",
     "speaker": "As-Syeikh Muhammad Ahmad Ar-Rasyid",
-    "quote": "Ibrah Dua Anak Muda Al-'Afra' (Mu'adz dan Mu'awwaz r.a.) dalam Perang Badar:** Dua remaja belia yang merebut peluang menumbangkan ketua thaghut Quraisy, Abu Jahal, membuktikan bahawa keimanan membara tunas muda mampu menggoncang empayar kebatilan.",
+    "quote": "Ibrah Dua Anak Muda Al-'Afra' (Mu'adz dan Mu'awwaz RA) dalam Perang Badar:** Dua remaja belia yang merebut peluang menumbangkan ketua thaghut Quraisy, Abu Jahal, membuktikan bahawa keimanan membara tunas muda mampu menggoncang empayar kebatilan.",
     "category": "rasyid"
   },
   {

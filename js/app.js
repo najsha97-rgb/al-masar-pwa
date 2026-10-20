@@ -762,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 
       'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Imam Ahmad', 
       'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 
-      'Rasulullah saw', 'Rasulullah SAW', 'Nabi saw', 
+      'Rasulullah SAW', 'Rasulullah SAW', 'Nabi SAW', 
       'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'
     ];
     names.forEach(name => {
