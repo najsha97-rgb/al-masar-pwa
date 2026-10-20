@@ -749,7 +749,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function formatQuoteText(text) {
     // Highlight potential names (dengan ejaan standard kemas kini)
-    const names = ['Imam Hasan al-Banna', 'Hasan al-Banna', 'Sayyid Qutb', 'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Ibn Taimiyah', 'Imam Ahmad', 'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 'Rasulullah saw', 'Rasulullah SAW', 'Nabi saw', 'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'];
+    const names = ['Imam Hasan al-Banna', 'Hasan al-Banna', 'Sayyid Qutb', 'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Ibnu Taimiyah', 'Imam Ahmad', 'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 'Rasulullah saw', 'Rasulullah SAW', 'Nabi saw', 'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'];
     let formatted = text;
     names.forEach(name => {
       const regex = new RegExp(`(${name})`, 'gi');
