@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v39-subtopik8-20261020';
+const CACHE_NAME = 'almasar-pwa-v40-sorotan-20261020';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

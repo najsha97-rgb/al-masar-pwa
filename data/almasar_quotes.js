@@ -1,4 +1,4 @@
-window.ALMASAR_QUOTES = [
+const ALMASAR_QUOTES = [
   {
     "chapterNumber": "Mukadimah",
     "chapterTitle": "Dasar-Dasar Perancangan Dakwah",
@@ -75,7 +75,7 @@ window.ALMASAR_QUOTES = [
     "chapterNumber": "Mukadimah",
     "chapterTitle": "Dasar-Dasar Perancangan Dakwah",
     "subtopicId": "c1_s1",
-    "subtopicTitle": "Kerdipan Kritikan",
+    "subtopicTitle": "Sorotan Kritikan",
     "speaker": "As-Syeikh Muhammad Ahmad Ar-Rasyid",
     "quote": "“Pengurusan dakwah Islam terbina di atas tiga tiang polisi utama: Polisi Luaran yang mengatur hubungan dakwah dengan pihak lain, Polisi Dalaman yang membentuk tanzim, dan Polisi Tarbawi yang memilih kurikulum pembinaan syakhsiah.”",
     "category": "rasyid",
