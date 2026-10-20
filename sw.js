@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v50-bab10fn-20261020';
+const CACHE_NAME = 'v51-bab11fn-20261020';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
