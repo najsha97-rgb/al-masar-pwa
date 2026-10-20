@@ -240,9 +240,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Active layer indicator text
     const modeBadge = document.getElementById('activeModeBadge');
+    const subFnCount = (sub.footnotes && sub.footnotes.length > 0) ? sub.footnotes.length : 0;
     modeBadge.textContent = state.layer === 'layer1' 
-      ? 'Versi Lengkap (Terjemahan Penuh)' 
-      : 'Ringkasan Eksklusif (Layer 2)';
+      ? `Versi Lengkap (${sub.paragraphs ? sub.paragraphs.length : 0} Perenggan${subFnCount > 0 ? ` & ${subFnCount} Nota Kaki` : ''})` 
+      : 'Ringkasan Eksklusif (Layer 2 - Fiqh Haraki & Intipati)';
 
     // Update bookmark status
     updateBookmarkBtnStatus();
@@ -276,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (isMainlyArabic) {
             p.className = 'arabic-text';
             const cleanText = para.replace(/^[>\s]+/, '');
-            p.textContent = cleanText;
+            p.innerHTML = cleanText;
           } else if (para.startsWith('“') || para.startsWith('"') || para.includes('berkata:') || para.includes('pesan:')) {
             p.className = 'quote-highlight-box';
             p.innerHTML = formatQuoteText(para);
@@ -305,6 +306,114 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           contentBody.appendChild(p);
         });
+
+        // ==================== SUBTOPIC FOOTNOTES SECTION (AL-MUNTALAQ DESIGN) ====================
+        if (sub.footnotes && sub.footnotes.length > 0) {
+          const fnSection = document.createElement('div');
+          fnSection.className = 'chapter-footnotes-section';
+          fnSection.id = 'chapterFootnotes';
+
+          fnSection.innerHTML = `
+            <div class="footnotes-title-bar">
+              <div class="fn-title-group">
+                <div class="fn-title-icon-wrap" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  </svg>
+                </div>
+                <div class="fn-title-text">
+                  <h4>Nota Kaki & Rujukan Ilmiah</h4>
+                  <span class="fn-arabic-subtitle">المراجع والهوامش</span>
+                </div>
+              </div>
+              <span class="fn-total-pill">${sub.footnotes.length} Rujukan</span>
+            </div>
+            <div class="footnotes-list-box">
+              ${sub.footnotes.map(fn => `
+                <div id="fn-item-${fn.id}" class="footnote-card">
+                  <div class="fn-card-topbar">
+                    <button type="button" class="fn-card-badge-btn" data-fn-id="${fn.id}" aria-label="Kembali ke perenggan [${fn.id}] untuk sambung bacaan" title="Kembali ke perenggan [${fn.id}] (Klik untuk sambung bacaan)">
+                      <span class="fn-islamic-star" aria-hidden="true">❖</span>
+                      <svg class="fn-badge-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M7.5 5L2.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2.5 10H13.5C15.7091 10 17.5 11.7909 17.5 14V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <span class="fn-card-badge-num">[${fn.id}]</span>
+                    </button>
+                  </div>
+                  <div class="fn-card-body">${fn.text}</div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+
+          contentBody.appendChild(fnSection);
+
+          // 1. Attach interactive Click Handlers on in-text Footnote Citations (.fn-ref) (Atas-Bawah)
+          contentBody.querySelectorAll('.fn-ref').forEach(el => {
+            const fnId = el.getAttribute('data-fn-id');
+            if (!el.id) {
+              el.id = `fnref-${fnId}`;
+            }
+            el.setAttribute('role', 'button');
+            el.setAttribute('tabindex', '0');
+            el.title = el.getAttribute('title') || `Lihat Nota Kaki [${fnId}]`;
+
+            el.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                el.click();
+              }
+            });
+            el.addEventListener('click', (e) => {
+              e.preventDefault();
+              const targetFn = document.getElementById(`fn-item-${fnId}`);
+              if (targetFn) {
+                targetFn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                targetFn.classList.remove('fn-highlight');
+                void targetFn.offsetWidth; // trigger reflow for animation
+                targetFn.classList.add('fn-highlight');
+                setTimeout(() => targetFn.classList.remove('fn-highlight'), 3000);
+              }
+              const fnData = sub.footnotes ? sub.footnotes.find(f => f.id == fnId) : null;
+              if (fnData) {
+                showToast(`[${fnId}] ${fnData.text}`);
+              }
+            });
+          });
+
+          // 2. Attach Click Handlers to the Left Badge Button (.fn-card-badge-btn) to jump back to text (Bawah-Atas)
+          contentBody.querySelectorAll('.fn-card-badge-btn, .fn-back-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              const fnId = btn.getAttribute('data-fn-id');
+              const targetRef = document.getElementById(`fnref-${fnId}`) || contentBody.querySelector(`.fn-ref[data-fn-id="${fnId}"]`);
+              if (targetRef) {
+                targetRef.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Denyutan warna emas/hijau pada nombor rujukan dalam perenggan
+                targetRef.classList.remove('fn-ref-return-highlight');
+                void targetRef.offsetWidth; // trigger reflow
+                targetRef.classList.add('fn-ref-return-highlight');
+                setTimeout(() => targetRef.classList.remove('fn-ref-return-highlight'), 3200);
+
+                // Kilauan lembut pada perenggan agar mudah menyambung bacaan
+                const parentBlock = targetRef.closest('.reader-paragraph, .reader-quran-box, .quote-highlight-box, .arabic-text, p');
+                if (parentBlock) {
+                  parentBlock.classList.remove('para-return-glow');
+                  void parentBlock.offsetWidth;
+                  parentBlock.classList.add('para-return-glow');
+                  setTimeout(() => parentBlock.classList.remove('para-return-glow'), 2500);
+                }
+
+                showToast(`Kembali ke perenggan [${fnId}] • Sila sambung bacaan 📖`);
+              } else {
+                showToast(`Perenggan rujukan [${fnId}] tidak ditemui pada paparan ini.`);
+              }
+            });
+          });
+        }
       } else {
         contentBody.innerHTML = '<p class="text-muted">Tiada teks lanjutan bagi bahagian ini.</p>';
       }
