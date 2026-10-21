@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v105-b5-verse-fix-20261021';
+const CACHE_NAME = 'almasar-pwa-v106-standardize-all-footnotes-20261021';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
