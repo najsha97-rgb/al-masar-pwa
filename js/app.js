@@ -157,7 +157,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentNavItem) {
       currentNavItem.classList.add('open');
     }
-  }  // 5. Navigate to Chapter and Subtopic
+  }  
+  // Global Event Delegation for Interactive Jump Links (e.g. Prolog <-> Keterangan)
+  document.addEventListener('click', (e) => {
+    const jumpBtn = e.target.closest('[data-jump-ch]');
+    if (jumpBtn) {
+      e.preventDefault();
+      const chIdx = parseInt(jumpBtn.getAttribute('data-jump-ch'), 10);
+      const subIdx = parseInt(jumpBtn.getAttribute('data-jump-sub'), 10);
+      navigateTo(chIdx, subIdx);
+    }
+  });
+
+  // 5. Navigate to Chapter and Subtopic
+  window.navigateTo = function(chIdx, sIdx, targetLayer = null) { return navigateTo(chIdx, sIdx, targetLayer); };
   function navigateTo(chIdx, sIdx, targetLayer = null) {
     state.currentChapter = chIdx;
     state.currentSubtopic = sIdx;

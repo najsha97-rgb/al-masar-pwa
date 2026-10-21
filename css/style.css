@@ -2756,3 +2756,34 @@ mark.content-search-match.active-match {
 .prolog-nav-note strong {
   color: #fff;
 }
+
+
+.prolog-jump-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.08) 100%);
+  border: 1.5px solid var(--gold-primary);
+  border-radius: var(--radius-sm, 8px);
+  color: var(--gold-light, #fde047);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.98rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.prolog-jump-link:hover {
+  background: var(--gold-primary);
+  color: #060e20 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--gold-glow, rgba(234, 179, 8, 0.5));
+}
+
+.prolog-jump-link strong {
+  color: inherit;
+}
