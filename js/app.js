@@ -278,6 +278,10 @@ document.addEventListener('DOMContentLoaded', () => {
             p.className = 'arabic-text';
             const cleanText = para.replace(/^[>\s]+/, '');
             p.innerHTML = cleanText;
+          } else if (para.startsWith('### ') || (para.startsWith('**') && para.endsWith('**') && !para.includes('\n') && para.length < 130)) {
+            p.className = 'internal-subheading-card';
+            const cleanHeader = para.replace(/^###\s*/, '').replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
+            p.innerHTML = `<span class="subheading-accent" aria-hidden="true"></span><span class="subheading-title">${cleanHeader}</span>`;
           } else if (para.startsWith('“') || para.startsWith('"') || para.includes('berkata:') || para.includes('pesan:')) {
             p.className = 'quote-highlight-box';
             p.innerHTML = formatQuoteText(para);
