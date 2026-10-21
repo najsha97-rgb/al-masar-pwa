@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v101-remove-wrong-ar-tag-20261021';
+const CACHE_NAME = 'almasar-pwa-v102-add-centered-prolog-and-explanation-20261021';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
