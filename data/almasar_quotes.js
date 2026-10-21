@@ -1879,14 +1879,14 @@ var ALMASAR_QUOTES = [
   {
     "chapterNumber": "Bab 20",
     "chapterTitle": "Ujian Penguasaan (Panduan Jawapan Komprehensif)",
-    "subtopicId": "c20_s10",
+    "subtopicId": "c20_s9",
     "subtopicTitle": "Notis Penting Panduan Carian Web",
     "speaker": "Syeikh Muhammad Ahmad Al-Rasyid",
     "quote": "Amanah ilmu memelihara ketulenan warisan turats dakwah; carian pintar dan rujukan dwibahasa menghubungkan kefahaman mendalam asatizah dengan kepantasan gerak kerja para du'at di lapangan.",
     "category": "rasyid",
     "id": 153,
     "chapterIndex": 20,
-    "subtopicIndex": 9
+    "subtopicIndex": 8
   },
   {
     "chapterNumber": "Penutup",
@@ -2887,8 +2887,8 @@ var ALMASAR_QUOTES = [
   {
     "id": 237,
     "chapterIndex": 20,
-    "subtopicIndex": 9,
-    "subtopicId": "c20_s10",
+    "subtopicIndex": 8,
+    "subtopicId": "c20_s9",
     "chapterNumber": "Bab 20",
     "chapterTitle": "Ujian Penguasaan (Panduan Jawapan Komprehensif)",
     "subtopicTitle": "Notis Penting Panduan Carian Web",

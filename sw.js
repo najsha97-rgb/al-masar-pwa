@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v73-bab20-subtopic-reindex-20261021';
+const CACHE_NAME = 'almasar-pwa-v74-khatimah-complete-20261021';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
