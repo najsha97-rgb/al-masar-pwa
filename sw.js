@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v98-restore-sorotan-kritikan-wamidh-al-naqd-20261021';
+const CACHE_NAME = 'almasar-pwa-v99-hazaf-wamidh-al-naqd-20261021';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
