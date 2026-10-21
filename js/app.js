@@ -5,8 +5,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Data Initialization
-  const data = (typeof window !== 'undefined' && window.ALMASAR_DATA)
-    || (typeof ALMASAR_DATA !== 'undefined' ? ALMASAR_DATA : null);
+  const data = (typeof window !== 'undefined' && (window.ALMASAR_DATA || window.almasarData))
+    || (typeof ALMASAR_DATA !== 'undefined' ? ALMASAR_DATA : (typeof almasarData !== 'undefined' ? almasarData : null));
   const allHikmahQuotes = (typeof window !== 'undefined' && window.ALMASAR_QUOTES)
     || (typeof ALMASAR_QUOTES !== 'undefined' ? ALMASAR_QUOTES : []);
   if (!data) {
