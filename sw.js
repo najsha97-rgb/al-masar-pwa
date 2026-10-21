@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v65-bab16-complete-20261021';
+const CACHE_NAME = 'almasar-pwa-v66-fn-format-20261021';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

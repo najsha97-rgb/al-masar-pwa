@@ -330,21 +330,32 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="fn-total-pill">${sub.footnotes.length} Rujukan</span>
             </div>
             <div class="footnotes-list-box">
-              ${sub.footnotes.map(fn => `
-                <div id="fn-item-${fn.id}" class="footnote-card">
+              ${sub.footnotes.map(fn => {
+                const fId = (typeof fn === 'object' && fn !== null) ? fn.id : fn;
+                let fText = (typeof fn === 'object' && fn !== null) ? (fn.text || '') : '';
+                if (!fText && ch.footnotes) {
+                  const found = ch.footnotes.find(f => (typeof f === 'object' ? f.id : f) == fId);
+                  if (found) fText = (typeof found === 'object') ? found.text : found;
+                }
+                const formattedBody = fText
+                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                return `
+                <div id="fn-item-${fId}" class="footnote-card">
                   <div class="fn-card-topbar">
-                    <button type="button" class="fn-card-badge-btn" data-fn-id="${fn.id}" aria-label="Kembali ke perenggan [${fn.id}] untuk sambung bacaan" title="Kembali ke perenggan [${fn.id}] (Klik untuk sambung bacaan)">
+                    <button type="button" class="fn-card-badge-btn" data-fn-id="${fId}" aria-label="Kembali ke perenggan [${fId}] untuk sambung bacaan" title="Kembali ke perenggan [${fId}] (Klik untuk sambung bacaan)">
                       <span class="fn-islamic-star" aria-hidden="true">❖</span>
                       <svg class="fn-badge-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path d="M7.5 5L2.5 10L7.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M2.5 10H13.5C15.7091 10 17.5 11.7909 17.5 14V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
-                      <span class="fn-card-badge-num">[${fn.id}]</span>
+                      <span class="fn-card-badge-num">[${fId}]</span>
                     </button>
                   </div>
-                  <div class="fn-card-body">${fn.text}</div>
+                  <div class="fn-card-body">${formattedBody}</div>
                 </div>
-              `).join('')}
+              `;
+              }).join('')}
             </div>
           `;
 
@@ -376,9 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetFn.classList.add('fn-highlight');
                 setTimeout(() => targetFn.classList.remove('fn-highlight'), 3000);
               }
-              const fnData = sub.footnotes ? sub.footnotes.find(f => f.id == fnId) : null;
-              if (fnData) {
-                showToast(`[${fnId}] ${fnData.text}`);
+              const fnData = sub.footnotes ? sub.footnotes.find(f => (typeof f === 'object' ? f.id : f) == fnId) : null;
+              let toastText = (fnData && typeof fnData === 'object') ? fnData.text : '';
+              if (!toastText && ch.footnotes) {
+                const foundCh = ch.footnotes.find(f => (typeof f === 'object' ? f.id : f) == fnId);
+                if (foundCh) toastText = (typeof foundCh === 'object') ? foundCh.text : foundCh;
+              }
+              if (toastText) {
+                showToast(`[${fnId}] ${toastText.replace(/\*/g, '')}`);
               }
             });
           });
