@@ -235,7 +235,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Banner metadata
     document.getElementById('chBadgePill').textContent = ch.number;
-    document.getElementById('chArabicTitle').textContent = ch.title_ar || 'المسار';
+    const arTitleEl = document.getElementById('chArabicTitle');
+    if (arTitleEl) {
+      if (ch.title_ar && ch.title_ar.trim() !== '') {
+        arTitleEl.textContent = ch.title_ar;
+        arTitleEl.style.display = 'inline-block';
+      } else {
+        arTitleEl.textContent = '';
+        arTitleEl.style.display = 'none';
+      }
+    }
     document.getElementById('subtopicMainTitle').textContent = sub.title;
 
     // Active layer indicator text
