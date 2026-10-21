@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v103-prolog-interactive-links-and-gold-badges-20261021';
+const CACHE_NAME = 'almasar-pwa-v104-b4-verse-and-saw-fix-20261021';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
