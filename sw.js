@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-pwa-v107-enlarge-mobile-menu-btn-20261021';
+const CACHE_NAME = 'almasar-pwa-v108-enlarge-hp-sidebar-font-20261022';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

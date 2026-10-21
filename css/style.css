@@ -366,7 +366,7 @@ body {
 
 .chapter-header-btn {
   width: 100%;
-  padding: 10px 12px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -374,12 +374,13 @@ body {
   border: none;
   color: var(--text-main);
   font-family: inherit;
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: 1.02rem;
+  font-weight: 700;
   text-align: left;
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: var(--transition);
+  line-height: 1.35;
 }
 
 .chapter-header-btn:hover {
@@ -422,14 +423,15 @@ body {
 
 .chapter-title-text {
   flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .chevron-icon {
   transition: transform 0.25s ease;
   color: var(--text-muted);
+  flex-shrink: 0;
+  margin-left: 6px;
 }
 
 .chapter-nav-item.open .chevron-icon {
@@ -438,7 +440,7 @@ body {
 
 .subtopic-list {
   list-style: none;
-  padding: 4px 8px 8px 34px;
+  padding: 6px 8px 10px 22px;
   display: none;
 }
 
@@ -448,21 +450,21 @@ body {
 
 .subtopic-nav-btn {
   width: 100%;
-  padding: 7px 10px;
-  margin-bottom: 2px;
-  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  border-radius: 8px;
   background: none;
   border: none;
   color: var(--text-muted);
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: 0.98rem;
+  line-height: 1.45;
   text-align: left;
   cursor: pointer;
   transition: var(--transition);
   display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .subtopic-nav-btn:hover {
@@ -945,6 +947,29 @@ body {
     z-index: 40;
     transform: translateX(-100%);
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.4);
+    width: min(350px, 88vw);
+  }
+
+  /* HP Optimized Scroll Menu Typography */
+  .chapter-header-btn {
+    font-size: 1.06rem !important;
+    padding: 13px 14px !important;
+  }
+  .chapter-num-badge {
+    min-width: 30px !important;
+    height: 30px !important;
+    font-size: 0.85rem !important;
+    margin-right: 10px !important;
+  }
+  .subtopic-nav-btn {
+    font-size: 1.02rem !important; /* Font subtopik diperbesar untuk HP */
+    padding: 11px 14px !important; /* Sentuhan jari lebih lapang & selesa */
+    line-height: 1.48 !important;
+    margin-bottom: 5px !important;
+  }
+  .search-input {
+    font-size: 0.98rem !important;
+    padding: 12px 14px 12px 40px !important;
   }
 
   .app-sidebar.open-mobile {
