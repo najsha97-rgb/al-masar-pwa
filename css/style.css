@@ -2666,12 +2666,35 @@ mark.content-search-match.active-match {
   flex: 1;
   font-family: inherit;
   color: var(--text-light);
-  line-height: 1.7;
+  line-height: 1.75;
+  font-size: 0.96rem;
 }
 
 [data-theme="light"] .fn-card-body {
   color: #334155;
 }
+
+/* Enhanced Italic Styling for Book & Reference Titles (Both Latin and Arabic) */
+.fn-card-body em,
+.book-ref-title {
+  font-style: italic !important;
+  font-weight: 600;
+  color: #34d399 !important;
+  display: inline-block;
+  transform: skewX(-9deg);
+  padding: 0 2px;
+}
+
+[data-theme="light"] .fn-card-body em,
+[data-theme="light"] .book-ref-title {
+  color: #047857 !important;
+  font-style: italic !important;
+  font-weight: 600;
+  display: inline-block;
+  transform: skewX(-9deg);
+  padding: 0 2px;
+}
+
 
 /* ==========================================================================
    IN-TEXT CITATION BADGES & RETURN ANIMATIONS (.fn-ref)
