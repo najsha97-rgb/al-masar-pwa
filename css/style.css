@@ -2671,29 +2671,32 @@ mark.content-search-match.active-match {
 }
 
 [data-theme="light"] .fn-card-body {
-  color: #334155;
+  color: #1e293b;
 }
 
 /* Enhanced Italic Styling for Book & Reference Titles (Both Latin and Arabic) */
 .fn-card-body em,
 .book-ref-title {
   font-style: italic !important;
-  font-weight: 600;
-  color: #34d399 !important;
+  font-weight: 600 !important;
+  color: #34d399 !important; /* Luminous emerald green */
   display: inline-block;
-  transform: skewX(-9deg);
+  transform: skewX(-9deg); /* Slants reliably across all fonts & devices, including Arabic */
   padding: 0 2px;
+  letter-spacing: 0.01em;
 }
 
 [data-theme="light"] .fn-card-body em,
 [data-theme="light"] .book-ref-title {
-  color: #047857 !important;
+  color: #047857 !important; /* Deep scholarly emerald green */
   font-style: italic !important;
-  font-weight: 600;
+  font-weight: 600 !important;
   display: inline-block;
   transform: skewX(-9deg);
   padding: 0 2px;
+  letter-spacing: 0.01em;
 }
+
 
 
 /* ==========================================================================

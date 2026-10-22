@@ -312,10 +312,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const numMatch = para.match(/^(\d+)\.\s+\*\*(.*?)\*\*:?\s*(.*)$/);
             if (numMatch) {
               p.className = 'numbered-item-card';
-              const titleHtml = numMatch[2].replace(/\*(.*?)\*/g, '<em>$1</em>');
+              const titleHtml = numMatch[2].replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
               let descHtml = numMatch[3]
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
               p.innerHTML = `
                 <div class="num-card-badge">${numMatch[1]}</div>
                 <div class="num-card-content">
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
               // Standard paragraph with markdown formatting (bold, italic)
               p.innerHTML = para
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
             }
           }
           contentBody.appendChild(p);
@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 const formattedBody = fText
                   .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                  .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                  .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
                 return `
                 <div id="fn-item-${fId}" class="footnote-card">
                   <div class="fn-card-topbar">
@@ -468,7 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Convert simple markdown bullets and bold into HTML
         let htmlContent = sub.summary
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>')
           .replace(/\n\*\s/g, '</li><li>')
           .replace(/\n-\s/g, '</li><li>');
 
