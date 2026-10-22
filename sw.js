@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v118-hikmah-20261022';
+const CACHE_NAME = 'almasar-v119-ubudiyyah-muraghamah-20261022';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
