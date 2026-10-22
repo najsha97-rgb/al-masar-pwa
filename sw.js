@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v112-saw-standardized-20261022';
+const CACHE_NAME = 'almasar-v113-hanging-indent-20261022';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

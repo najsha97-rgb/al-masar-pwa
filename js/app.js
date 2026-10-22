@@ -123,7 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const subLi = document.createElement('li');
         const subBtn = document.createElement('button');
         subBtn.className = `subtopic-nav-btn ${chIdx === state.currentChapter && sIdx === state.currentSubtopic ? 'active-sub' : ''}`;
-        subBtn.textContent = `${sIdx + 1}. ${sub.title}`;
+        subBtn.innerHTML = `
+          <span class="subtopic-num">${sIdx + 1}.</span>
+          <span class="subtopic-title-text">${sub.title}</span>
+        `;
         subBtn.title = sub.title;
 
         subBtn.addEventListener('click', (e) => {
