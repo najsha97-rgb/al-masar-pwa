@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v114-spelling-rafii-20261022';
+const CACHE_NAME = 'almasar-v115-spelling-haraki-islami-20261022';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
