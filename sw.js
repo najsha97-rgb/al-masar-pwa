@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v110-colored-references-20261022';
+const CACHE_NAME = 'almasar-v111-title-case-subtopics-20261022';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
