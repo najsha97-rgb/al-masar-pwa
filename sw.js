@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v121-dbp-al-standard-20261022';
+const CACHE_NAME = 'almasar-v122-disable-full-pdf-20261023';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
