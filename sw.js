@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v123-content-protection-20261023';
+const CACHE_NAME = 'almasar-v124-arabic-typography-upright-20261023';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -315,10 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const numMatch = para.match(/^(\d+)\.\s+\*\*(.*?)\*\*:?\s*(.*)$/);
             if (numMatch) {
               p.className = 'numbered-item-card';
-              const titleHtml = numMatch[2].replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
-              let descHtml = numMatch[3]
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
+              const titleHtml = formatSmartItalicHtml(numMatch[2]);
+              let descHtml = formatSmartItalicHtml(numMatch[3].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
               p.innerHTML = `
                 <div class="num-card-badge">${numMatch[1]}</div>
                 <div class="num-card-content">
@@ -328,9 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
               `;
             } else {
               // Standard paragraph with markdown formatting (bold, italic)
-              p.innerHTML = para
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
+              const bolded = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+              p.innerHTML = formatSmartItalicHtml(bolded);
             }
           }
           contentBody.appendChild(p);
@@ -366,9 +363,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   const found = ch.footnotes.find(f => (typeof f === 'object' ? f.id : f) == fId);
                   if (found) fText = (typeof found === 'object') ? found.text : found;
                 }
-                const formattedBody = fText
-                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                  .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>');
+                const bolded = fText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                const formattedBody = formatSmartItalicHtml(bolded);
                 return `
                 <div id="fn-item-${fId}" class="footnote-card">
                   <div class="fn-card-topbar">
@@ -469,9 +465,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (sub.summary && sub.summary.trim() !== '') {
         // Convert simple markdown bullets and bold into HTML
-        let htmlContent = sub.summary
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em class="book-ref-title">$1</em>')
+        const bolded = sub.summary.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        let htmlContent = formatSmartItalicHtml(bolded)
           .replace(/\n\*\s/g, '</li><li>')
           .replace(/\n-\s/g, '</li><li>');
 
@@ -814,6 +809,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const regex = new RegExp(`(${name})`, 'gi');
       formatted = formatted.replace(regex, '<span class="tokoh-name">$1</span>');
     });
+
+    // Format Arabic quote brackets « ... » without italics
+    formatted = formatted.replace(/«\s*(.*?)\s*»/g, '<span class="ar-quote" dir="rtl" style="font-style: normal !important; transform: none !important; font-family: \'Amiri\', serif;">« $1 »</span>');
 
     // Restore protected HTML tags
     return formatted.replace(/___HTML_TOKEN_(\d+)___/g, (_, i) => tokens[parseInt(i, 10)]);
@@ -1448,8 +1446,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function formatHikmahQuote(text) {
     if (!text) return '';
     let formatted = text;
-    // Highlight Arabic quotation brackets « ... »
-    formatted = formatted.replace(/«\s*(.*?)\s*»/g, '<span class="ar-quote">« $1 »</span>');
+    // Highlight Arabic quotation brackets « ... » with distinct upright Arabic styling
+    formatted = formatted.replace(/«\s*(.*?)\s*»/g, '<span class="ar-quote" dir="rtl" style="font-style: normal !important; transform: none !important; font-family: \'Amiri\', serif;">« $1 »</span>');
     // Highlight Malay / English quoted speech “...”
     formatted = formatted.replace(/“\s*(.*?)\s*”/g, '<strong style="color: var(--gold-light);">“$1”</strong>');
     return formatted;
@@ -1491,6 +1489,19 @@ document.addEventListener('DOMContentLoaded', () => {
       showToast('Gagal menyalin teks');
     }
     document.body.removeChild(textArea);
+  }
+
+  // Helper to format text with proper Italic for Latin book titles, keeping Arabic upright
+  function formatSmartItalicHtml(str) {
+    if (!str) return '';
+    return str.replace(/\*(.*?)\*/g, (match, p1) => {
+      const arCount = (p1.match(/[\u0600-\u06FF]/g) || []).length;
+      const latinCount = (p1.match(/[a-zA-Z]/g) || []).length;
+      if (arCount > 0 && arCount >= latinCount) {
+        return `<span class="arabic-ref-title" dir="rtl" style="font-style: normal !important; transform: none !important; font-family: 'Amiri', serif;">${p1}</span>`;
+      }
+      return `<em class="book-ref-title">${p1}</em>`;
+    });
   }
 
   // Initial Boot

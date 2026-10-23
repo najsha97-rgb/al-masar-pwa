@@ -798,6 +798,18 @@ body {
   margin-bottom: 4px;
 }
 
+/* Ensure any Arabic text inside quotes is NEVER italicized */
+.quote-highlight-box .arabic-text,
+.quote-highlight-box .ar-quote,
+.quote-highlight-box .quran-ayah,
+.quote-highlight-box .arabic-ref-title,
+.quote-highlight-box [lang="ar"],
+.quote-highlight-box :lang(ar) {
+  font-style: normal !important;
+  transform: none !important;
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
+}
+
 /* Layer 2 Markdown Summary Specific Styling */
 .summary-container {
   background: var(--bg-card);
@@ -2711,14 +2723,14 @@ mark.content-search-match.active-match {
   color: #1e293b;
 }
 
-/* Enhanced Italic Styling for Book & Reference Titles (Both Latin and Arabic) */
+/* Enhanced Italic Styling for Latin Book & Reference Titles */
 .fn-card-body em,
 .book-ref-title {
   font-style: italic !important;
   font-weight: 600 !important;
   color: #34d399 !important; /* Luminous emerald green */
   display: inline-block;
-  transform: skewX(-9deg); /* Slants reliably across all fonts & devices, including Arabic */
+  transform: skewX(-9deg); /* Slants Latin titles */
   padding: 0 2px;
   letter-spacing: 0.01em;
 }
@@ -2732,6 +2744,24 @@ mark.content-search-match.active-match {
   transform: skewX(-9deg);
   padding: 0 2px;
   letter-spacing: 0.01em;
+}
+
+/* STRICT ARABIC TYPOGRAPHY INTEGRITY - NEVER ITALICIZED OR SKEWED */
+.arabic-text,
+.quran-ayah,
+.reader-quran-box,
+.ar-quote,
+.prolog-center-arabic,
+.arabic-ref-title,
+.book-ref-title:lang(ar),
+.book-ref-title[dir="rtl"],
+.fn-card-body .arabic-text,
+.fn-card-body .arabic-ref-title,
+[lang="ar"],
+:lang(ar) {
+  font-style: normal !important;
+  transform: none !important;
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
 }
 
 
