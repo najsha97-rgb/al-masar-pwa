@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-cache-v65-pdf-only';
+const CACHE_NAME = 'almasar-cache-v66-modal-restored';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
