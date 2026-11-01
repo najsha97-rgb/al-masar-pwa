@@ -12,7 +12,7 @@
   <link rel="icon" type="image/jpeg" href="./almasar_islamic_icon.jpg">
   <link rel="apple-touch-icon" href="./almasar_islamic_icon.jpg">
   <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="./css/style.css?v=20261102_v67_modal_overlay_fix">
+  <link rel="stylesheet" href="./css/style.css?v=20261102_v68_modal_close_fix">
 
   <!-- Google Fonts: Premium Manuscript Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -208,6 +208,30 @@
       transform: translateY(-1px);
     }
   </style>
+<script>
+window.openPeradabanModal = function() {
+  var m = document.getElementById('modalPeradabanSpotlight');
+  if (m) {
+    m.classList.add('show');
+    m.style.setProperty('display', 'flex', 'important');
+    document.body.style.overflow = 'hidden';
+    var b = m.querySelector('.peradaban-modal-body, .tarbiah-modal-body');
+    if (b) b.scrollTop = 0;
+  }
+};
+window.closePeradabanModal = function() {
+  var m = document.getElementById('modalPeradabanSpotlight');
+  if (m) {
+    m.classList.remove('show');
+    m.style.setProperty('display', 'none', 'important');
+    document.body.style.overflow = '';
+  }
+};
+window.togglePeradabanModal = function(show) {
+  if (show) window.openPeradabanModal();
+  else window.closePeradabanModal();
+};
+</script>
 </head>
 <body>
 
@@ -240,7 +264,7 @@
         <button class="layer-btn" id="btnLayerHikmah" role="tab" aria-selected="false">
           💎 <span>Mutiara Hikmah</span>
         </button>
-        <button class="layer-btn" id="btnHeaderPeradaban" onclick="if(window.openPeradabanModal){window.openPeradabanModal();}else{var m=document.getElementById(\'modalPeradabanSpotlight\');if(m){m.style.display=\'flex\';document.body.style.overflow=\'hidden\';}}" role="tab" aria-selected="false" title="Wawasan Ummah Fadhilah &amp; Kuasa Watan">
+        <button class="layer-btn" id="btnHeaderPeradaban" role="tab" aria-selected="false" title="Wawasan Ummah Fadhilah &amp; PBI" onclick="openPeradabanModal()">
           🌍 <span>Ummah Fadhilah &amp; PBI</span>
         </button>
       </div>
@@ -275,7 +299,7 @@
       </div>
 
       <!-- Quick Access: Wawasan Ummah Fadhilah & PBI (Dokumen Am & Khas) -->
-      <div class="sidebar-peradaban-promo" id="sidebarPeradabanBtn" role="button" tabindex="0" title="Buka Wawasan Ummah Fadhilah &amp; Peradaban Baru Islam (PBI)" onclick="if(window.openPeradabanModal){window.openPeradabanModal();}else{var m=document.getElementById('modalPeradabanSpotlight');if(m){m.style.display='flex';document.body.style.overflow='hidden';}}">
+      <div class="sidebar-peradaban-promo" id="sidebarPeradabanBtn" role="button" tabindex="0" title="Buka Wawasan Ummah Fadhilah &amp; Peradaban Baru Islam (PBI)" onclick="openPeradabanModal()">
         <div class="peradaban-promo-icon">🌍</div>
         <div class="peradaban-promo-info">
           <span class="peradaban-promo-title">Ummah Fadhilah &amp; PBI</span>
@@ -376,11 +400,11 @@
   </div>
 
   <!-- ================= PERADABAN & UMMAH FADHILAH SPOTLIGHT MODAL ================= -->
-  <div class="peradaban-modal-overlay" id="modalPeradabanSpotlight" style="display: none;" onclick="if(event.target===this){if(window.togglePeradabanModal){window.togglePeradabanModal(false);}else{this.style.display=\'none\';document.body.style.overflow=\'\';}}">
+  <div class="peradaban-modal-overlay" id="modalPeradabanSpotlight" style="display: none !important;" onclick="if(event.target===this)closePeradabanModal()">
     <div class="peradaban-modal-box">
       <div class="peradaban-modal-header">
         <div class="peradaban-modal-badge">🌍 WAWASAN 100 TAHUN KEDUA (PBI)</div>
-        <button class="icon-btn tarbiah-modal-close" id="btnClosePeradabanModal" onclick="if(window.togglePeradabanModal){window.togglePeradabanModal(false);}else{var m=document.getElementById(\'modalPeradabanSpotlight\');if(m){m.style.display=\'none\';document.body.style.overflow=\'\';}}" aria-label="Tutup">✕</button>
+        <button class="icon-btn tarbiah-modal-close" id="btnClosePeradabanModal" onclick="closePeradabanModal()" aria-label="Tutup">✕</button>
       </div>
       <h3 class="peradaban-modal-title">Ummah Fadhilah &amp; Peradaban Baru Islam</h3>
       <p class="peradaban-modal-subtitle">Sumbangan Kitab Al-Masār (As-Syeikh Muhammad Ahmad al-Rasyid) Sebagai Seni Bina Polisi Kenegaraan &amp; Perancangan Haraki</p>
@@ -526,10 +550,10 @@
   </div>
 
   <!-- Data Scripts (Offline Direct Access) -->
-  <script src="./data/almasar_quotes.js?v=20261102_v67_modal_overlay_fix"></script>
-  <script src="./data/almasar_data.js?v=20261102_v67_modal_overlay_fix"></script>
+  <script src="./data/almasar_quotes.js?v=20261102_v68_modal_close_fix"></script>
+  <script src="./data/almasar_data.js?v=20261102_v68_modal_close_fix"></script>
   <!-- Application Core Script -->
-  <script src="./js/app.js?v=20261102_v67_modal_overlay_fix"></script>
+  <script src="./js/app.js?v=20261102_v68_modal_close_fix"></script>
 
 </body>
 </html>
