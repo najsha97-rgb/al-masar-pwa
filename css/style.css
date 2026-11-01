@@ -3020,9 +3020,9 @@ textarea,
   user-select: text !important;
 }
 
-
-MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
-   Sumbangan Al-Muntalaq dalam Kuasa Watan & Peradaban
+/* ========================================================
+   MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
+   Sumbangan Al-Masār dalam Kuasa Watan & Peradaban
    ======================================================== */
 
 .sidebar-peradaban-promo {
@@ -3030,7 +3030,7 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  margin: 10px 14px 16px 14px;
+  margin: 0 14px 16px 14px;
   background: linear-gradient(135deg, rgba(2, 132, 199, 0.16) 0%, rgba(217, 119, 6, 0.15) 100%);
   border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: 12px;
@@ -3091,38 +3091,10 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
   letter-spacing: 0.4px;
 }
 
-.peradaban-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
+/* Peradaban Modal Enhancements */
 .peradaban-modal-box {
-  background: var(--bg-card, #0f172a);
-  border: 1px solid rgba(56, 189, 248, 0.35);
   border-top: 4px solid #38bdf8 !important;
-  border-radius: 16px;
   max-width: 760px !important;
-  width: 100%;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.peradaban-modal-header {
-  padding: 1.2rem 1.5rem 0.5rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .peradaban-modal-badge {
@@ -3137,21 +3109,14 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
 }
 
 .peradaban-modal-title {
-  font-size: 1.35rem;
-  font-weight: 700;
   color: #7dd3fc !important;
-  padding: 0.2rem 1.5rem 0 1.5rem;
-  margin: 0;
 }
 
 .peradaban-modal-subtitle {
-  font-size: 0.86rem;
-  color: var(--text-muted);
-  padding: 0.35rem 1.5rem 1rem 1.5rem;
-  margin: 0;
   border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
 }
 
+/* Panel Muat Turun Fail Sedia Digunakan */
 .peradaban-download-panel {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.85) 100%);
   border: 1px solid rgba(56, 189, 248, 0.35);
@@ -3244,14 +3209,7 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
   margin-top: 2px;
 }
 
-.peradaban-modal-body {
-  padding: 1.25rem 1.5rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
+/* Highlight & Cards */
 .peradaban-card-highlight {
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.7) 100%);
   border: 1px solid rgba(56, 189, 248, 0.25);
@@ -3279,9 +3237,6 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
 .peradaban-pillar-card {
   background: rgba(15, 23, 42, 0.5) !important;
   border: 1px solid rgba(56, 189, 248, 0.2) !important;
-  border-radius: 12px;
-  padding: 1.15rem;
-  transition: all 0.25s ease;
 }
 
 .peradaban-pillar-card:hover {
@@ -3304,6 +3259,7 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
     grid-template-columns: 1fr;
     text-align: center;
   }
+
   .chain-arrow {
     transform: rotate(90deg);
     margin: 4px auto;
@@ -3347,26 +3303,68 @@ MODUL KHAS: UMMAH FADHILAH & PERADABAN BARU ISLAM (PBI)
   color: #cbd5e1;
 }
 
-.tarbiah-modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(56, 189, 248, 0.2);
-  display: flex;
-  justify-content: flex-end;
-}
-
 .peradaban-close-footer-btn {
   background: linear-gradient(135deg, #0284c7, #0369a1) !important;
-  color: #fff;
   border: 1px solid #38bdf8 !important;
-  border-radius: 8px;
-  padding: 9px 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
 .peradaban-close-footer-btn:hover {
   background: linear-gradient(135deg, #0ea5e9, #0284c7) !important;
   box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4) !important;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"] .sidebar-peradaban-promo {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(217, 119, 6, 0.08) 100%);
+  border-color: rgba(2, 132, 199, 0.3);
+}
+
+[data-theme="light"] .peradaban-promo-title {
+  color: #0369a1;
+}
+
+[data-theme="light"] .peradaban-modal-box {
+  background: #ffffff;
+  border-color: rgba(2, 132, 199, 0.4);
+}
+
+[data-theme="light"] .peradaban-modal-title {
+  color: #0369a1 !important;
+}
+
+[data-theme="light"] .peradaban-download-panel {
+  background: #f8fafc;
+  border-color: rgba(2, 132, 199, 0.3);
+}
+
+[data-theme="light"] .peradaban-card-highlight {
+  background: #f0f9ff;
+  border-color: rgba(2, 132, 199, 0.25);
+}
+
+[data-theme="light"] .peradaban-pillar-card {
+  background: #f8fafc !important;
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+[data-theme="light"] .peradaban-desc-text {
+  color: #334155;
+}
+
+[data-theme="light"] .chain-box {
+  background: #ffffff;
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+[data-theme="light"] .chain-box p {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .tetralogi-summary-box {
+  background: #fffbeb;
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+[data-theme="light"] .tetralogi-list {
+  color: #334155;
 }
