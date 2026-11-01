@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v68-modal-close-fix';
+const CACHE_NAME = 'almasar-v70-harmonise-pbi';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
