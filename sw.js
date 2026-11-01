@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-cache-v62-ummah-pbi';
+const CACHE_NAME = 'almasar-cache-v63-wawasan-pbi';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
