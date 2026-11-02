@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v70-harmonise-pbi';
+const CACHE_NAME = 'almasar-v71-hikmah-amiri-vocalised';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

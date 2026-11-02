@@ -1467,10 +1467,47 @@ document.addEventListener('DOMContentLoaded', () => {
   function formatHikmahQuote(text) {
     if (!text) return '';
     let formatted = text;
-    // Highlight Arabic quotation brackets « ... » with distinct upright Arabic styling
-    formatted = formatted.replace(/«\s*(.*?)\s*»/g, '<span class="ar-quote" dir="rtl" style="font-style: normal !important; transform: none !important; font-family: \'Amiri\', serif;">« $1 »</span>');
-    // Highlight Malay / English quoted speech “...”
-    formatted = formatted.replace(/“\s*(.*?)\s*”/g, '<strong style="color: var(--gold-light);">“$1”</strong>');
+
+    // Bersihkan sebarang aksara sesat '>' atau '&gt;' di permulaan baris
+    formatted = formatted.replace(/^[ \t]*(?:>|&gt;)[ \t]*/gm, '');
+
+    // 1. Sorot teks Arab « ... » dengan jajaran RTL & Amiri Gold sempurna
+    // Gunakan [\s\S]*? agar dapat memadankan bait syair berbilang baris
+    formatted = formatted.replace(/«\s*([\s\S]*?)\s*»/g, (match, p1) => {
+      const rawLines = p1.split('\n')
+        .map(l => l.replace(/^[ \t]*(?:>|&gt;)[ \t]*/, '').trim())
+        .filter(Boolean);
+
+      const arCount = (p1.match(/[\u0600-\u06FF]/g) || []).length;
+      const latCount = (p1.match(/[a-zA-Z]/g) || []).length;
+
+      if (arCount > 0 && arCount >= latCount) {
+        if (rawLines.length > 1) {
+          const linesHtml = rawLines
+            .map(line => `<div class="ar-verse-line" dir="rtl" style="direction: rtl !important; text-align: right !important;">${line}</div>`)
+            .join('');
+          return `<div class="ar-quote ar-poem-quote" dir="rtl" style="direction: rtl !important; text-align: right !important;">${linesHtml}</div>`;
+        } else {
+          return `<div class="ar-quote" dir="rtl" style="direction: rtl !important; text-align: right !important;">${rawLines[0] || p1}</div>`;
+        }
+      }
+      return `« ${p1} »`;
+    });
+
+    // 2. Terjemahan petikan Melayu: “...” atau "“...”"
+    formatted = formatted.replace(/(?:^|\n)\s*["“]\s*“?([\s\S]*?)”\s*["”]?\s*(?=\n|$)/g, (m, p1) => {
+      return `<div class="hikmah-trans-text">“${p1.trim()}”</div>`;
+    });
+    // Fallback untuk sebarang baki “...”
+    formatted = formatted.replace(/“\s*([\s\S]*?)\s*”/g, '<div class="hikmah-trans-text">“$1”</div>');
+
+    // 3. Panggilan Fiqh Tarbawi Haraki / Fiqh Haraki
+    formatted = formatted.replace(/⚔️\s*(?:<em>)?\s*(?:Fiqh Tarbawi Haraki|Fiqh Haraki):\s*(?:<\/em>)?\s*([\s\S]*)$/i, (m, p1) => {
+      return `<div class="hikmah-fiqh-box"><span class="hikmah-fiqh-badge">⚔️ Fiqh Haraki</span><div class="hikmah-fiqh-text">${p1.trim()}</div></div>`;
+    });
+
+    // 4. Penyelarasan baris baharu
+    formatted = formatted.replace(/\n\n/g, '<div style="margin-top: 0.65rem;"></div>');
     return formatted;
   }
 

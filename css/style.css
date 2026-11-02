@@ -1303,18 +1303,100 @@ body.light-theme .mobile-menu-btn:hover .menu-icon-svg {
   z-index: 2;
 }
 
-.hikmah-hero-quote .ar-quote {
-  display: block;
-  font-family: 'Amiri', serif;
-  font-size: 1.55rem;
-  line-height: 1.9;
-  color: var(--gold-light);
-  direction: rtl;
-  margin: 0.6rem 0;
-  padding: 8px 16px;
-  background: rgba(212, 175, 55, 0.08);
-  border-right: 3px solid var(--gold-primary);
-  border-radius: var(--radius-sm);
+.hikmah-hero-quote .ar-quote,
+.hikmah-card-body .ar-quote,
+.ar-quote {
+  display: block !important;
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 1.45rem !important;
+  line-height: 2.2 !important;
+  color: var(--gold-light, #fde047) !important;
+  direction: rtl !important;
+  text-align: right !important;
+  unicode-bidi: isolate !important;
+  margin: 0.8rem 0 1rem 0 !important;
+  padding: 12px 18px !important;
+  background: rgba(212, 175, 55, 0.08) !important;
+  border-right: 4px solid var(--gold-primary, #d4af37) !important;
+  border-left: none !important;
+  border-radius: 10px !important;
+  word-spacing: 0.08em !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .hikmah-hero-quote .ar-quote,
+[data-theme="light"] .hikmah-card-body .ar-quote,
+[data-theme="light"] .ar-quote {
+  color: #8c6b00 !important;
+  background: rgba(212, 175, 55, 0.1) !important;
+  border-right-color: #b38600 !important;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.08);
+}
+
+/* Jajaran bait syair berbilang baris: baris kedua dan seterusnya mesti rapat ke margin kanan */
+.ar-quote .ar-verse-line,
+.ar-verse-line {
+  display: block !important;
+  direction: rtl !important;
+  text-align: right !important;
+  unicode-bidi: isolate !important;
+  width: 100% !important;
+  margin: 0 !important;
+  margin-bottom: 0.45rem !important;
+  line-height: 2.2 !important;
+}
+
+.ar-quote .ar-verse-line:last-child,
+.ar-verse-line:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Terjemahan Bahasa Melayu */
+.hikmah-trans-text {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--text-main);
+  font-style: italic !important;
+  margin-bottom: 0.85rem;
+  padding: 4px 6px;
+}
+
+/* Kotak Panggilan Dimensi Fiqh Tarbawi Haraki */
+.hikmah-fiqh-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-left: 3px solid var(--emerald-primary);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 0.65rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+[data-theme="light"] .hikmah-fiqh-box {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(5, 150, 105, 0.25);
+  border-left-color: #059669;
+}
+
+.hikmah-fiqh-badge {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--emerald-primary);
+  margin-bottom: 4px;
+}
+
+[data-theme="light"] .hikmah-fiqh-badge {
+  color: #047857;
+}
+
+.hikmah-fiqh-text {
+  color: var(--text-main);
 }
 
 .hikmah-hero-source {
