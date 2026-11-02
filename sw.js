@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v72-retrans-masar';
+const CACHE_NAME = 'almasar-v73-single-y-sync';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
