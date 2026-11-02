@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v73-single-y-sync';
+const CACHE_NAME = 'almasar-v74-pengecualian-dbp';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

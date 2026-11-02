@@ -821,7 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const names = [
       'Imam Hasan al-Banna', 'Hasan al-Banna', 'Sayid Qutb', 
       'Umar bin al-Khattab', 'Abu al-Dardak', 'Abu ad-Darda\'', 
-      'Ibn al-Qayim', 'Ibnu Taimiyah', 'Imam Ahmad', 
+      'Ibn al-Qayyim', 'Ibnu Taimiyah', 'Imam Ahmad', 
       'Yahya bin Mu\'az', 'Abdullah bin Wahab', 'al-Ma’mun', 
       'Rasulullah SAW', 'Rasulullah SAW', 'Nabi SAW', 
       'Iqbal', 'Muhammad Iqbal', 'Hasan al-Hudhaibi'
