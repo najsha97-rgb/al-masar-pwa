@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v76-ringkasan-kemas';
+const CACHE_NAME = 'almasar-v77-jajaran-puisi-arab';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -304,7 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
         sub.paragraphs.forEach(para => {
           const trimmed = para.trim();
 
-          // 1. Direct Custom HTML Block (e.g. Lauhah Khithathiyah Infographic)
+          // 0. Ignore markdown horizontal rules
+          if (trimmed === '***' || trimmed === '---' || /^[\*\-]{3,}$/.test(trimmed)) {
+            return;
+          }
+
+          // 1. Direct Custom HTML Block (e.g. Lauhah Khithathiyah Infographic / Hierarchy Card)
           if (trimmed.startsWith('<div') || trimmed.startsWith('<section')) {
             const wrapper = document.createElement('div');
             wrapper.className = 'custom-html-block';
@@ -313,17 +318,76 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
           }
 
+          // 2. Intelligent Multi-line Grouping (Quran / Hadith / Syair Arab + Malay Translation)
+          // Normalize <br> to \n so mixed paragraphs split reliably
+          const normalizedPara = para.replace(/<br\s*\/?>/gi, '\n');
+          const lines = normalizedPara.split('\n');
+          const groups = [];
+          for (let rawLine of lines) {
+            const l = rawLine.trim();
+            if (!l || l === '>') continue;
+            const arC = (l.match(/[\u0600-\u06FF]/g) || []).length;
+            const latC = (l.match(/[a-zA-Z]/g) || []).length;
+            const isLineArabic = arC > 6 && arC > latC;
+            const gtype = isLineArabic ? 'ar' : 'lat';
+            if (groups.length === 0 || groups[groups.length - 1].type !== gtype) {
+              groups.push({ type: gtype, lines: [l] });
+            } else {
+              groups[groups.length - 1].lines.push(l);
+            }
+          }
+
+          // Case A: Mixed Arabic lines + Malay translation lines
+          if (groups.length > 1) {
+            const card = document.createElement('div');
+            card.className = 'quote-highlight-box arabic-quote-box';
+            let innerHtml = '';
+            groups.forEach(g => {
+              if (g.type === 'ar') {
+                let arContent = '';
+                g.lines.forEach(l => {
+                  arContent += formatArabicPoetryOrLine(l);
+                });
+                innerHtml += `<div class="ar-quote-block" dir="rtl">${arContent}</div>`;
+              } else {
+                const cleanLines = g.lines.map(l => l.replace(/^[>\s]+/, '').trim()).filter(Boolean).join('<br>');
+                const formatted = cleanLines.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                innerHtml += `<div class="lat-quote-block" dir="ltr">${formatSmartItalicHtml(formatted)}</div>`;
+              }
+            });
+            card.innerHTML = innerHtml;
+            contentBody.appendChild(card);
+            return;
+          }
+
+          // Case B: Pure Arabic Paragraph (single or multi-line)
+          if (groups.length === 1 && groups[0].type === 'ar') {
+            const isBlockquote = trimmed.startsWith('>');
+            const card = document.createElement('div');
+            card.className = isBlockquote ? 'quote-highlight-box arabic-quote-box' : 'arabic-text';
+            card.setAttribute('dir', 'rtl');
+            let arContent = '';
+            groups[0].lines.forEach(l => {
+              arContent += formatArabicPoetryOrLine(l);
+            });
+            card.innerHTML = isBlockquote ? `<div class="ar-quote-block" dir="rtl">${arContent}</div>` : arContent;
+            contentBody.appendChild(card);
+            return;
+          }
+
+          // Case C: Standard Latin or Other Paragraphs
           const p = document.createElement('p');
           
-          // Check if contains Arabic
+          // Fallback check if contains mostly Arabic
           const arabicChars = (para.match(/[\u0600-\u06FF]/g) || []).length;
           const latinChars = (para.match(/[a-zA-Z]/g) || []).length;
           const isMainlyArabic = arabicChars > 0 && arabicChars >= latinChars;
 
           if (isMainlyArabic) {
             p.className = 'arabic-text';
+            p.setAttribute('dir', 'rtl');
             const cleanText = para.replace(/^[>\s]+/, '');
-            p.innerHTML = cleanText;
+            p.innerHTML = formatArabicPoetryOrLine(cleanText);
           } else if (para.startsWith('### ') || (para.startsWith('**') && para.endsWith('**') && !para.includes('\n') && para.length < 130)) {
             p.className = 'internal-subheading-card';
             const cleanHeader = para.replace(/^###\s*/, '').replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
@@ -822,6 +886,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (existing) {
       existing.remove();
     }
+  }
+
+  // Format Arabic poetry couplet (Sadr & 'Ajuz) or single Arabic line
+  function formatArabicPoetryOrLine(rawLine) {
+    if (!rawLine) return '';
+    const clean = rawLine.replace(/^[>\s]+/, '').trim();
+    const cleanNoMd = clean.replace(/\*\*(.*?)\*\*/g, '$1');
+
+    // Check if it is a classical poetry couplet with separator (..., …, .. ..)
+    const sepMatch = cleanNoMd.match(/^(.*?)\s*(\.{2,4}|…|\.\.\s+\.\.)\s*(.*?)$/);
+    if (sepMatch) {
+      const sadr = sepMatch[1].trim();
+      const dots = sepMatch[2].trim();
+      const ajuz = sepMatch[3].trim();
+      const sadrAr = (sadr.match(/[\u0600-\u06FF]/g) || []).length;
+      const ajuzAr = (ajuz.match(/[\u0600-\u06FF]/g) || []).length;
+      if (sadrAr >= 3 && ajuzAr >= 3 && sadr.length <= 85 && ajuz.length <= 85) {
+        return `
+          <div class="ar-verse-couplet" dir="rtl">
+            <span class="ar-sadr" dir="rtl">${sadr}</span>
+            <span class="ar-verse-dots" aria-hidden="true">...</span>
+            <span class="ar-ajuz" dir="rtl">${ajuz}</span>
+          </div>
+        `;
+      }
+    }
+    return `<div class="ar-single-line" dir="rtl">${cleanNoMd}</div>`;
   }
 
   function formatQuoteText(text) {
@@ -1565,17 +1656,32 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.removeChild(textArea);
   }
 
-  // Helper to format text with proper Italic for Latin book titles, keeping Arabic upright
+  // Helper to format text with proper Italic for Latin book titles, keeping Arabic upright and preventing flipped punctuation
   function formatSmartItalicHtml(str) {
     if (!str) return '';
-    return str.replace(/\*(.*?)\*/g, (match, p1) => {
+    let out = str.replace(/\*(.*?)\*/g, (match, p1) => {
       const arCount = (p1.match(/[\u0600-\u06FF]/g) || []).length;
       const latinCount = (p1.match(/[a-zA-Z]/g) || []).length;
       if (arCount > 0 && arCount >= latinCount) {
         return `<span class="arabic-ref-title" dir="rtl" style="font-style: normal !important; transform: none !important; font-family: 'Amiri', serif;">${p1}</span>`;
       }
+      if (/[\u0600-\u06FF]/.test(p1)) {
+        const arWordRegex = /([\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u0652]+(?:\s+[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u0652]+)*)/g;
+        const safeP1 = p1.replace(arWordRegex, function(ar) {
+          if (!/[\u0600-\u06FF]/.test(ar)) return ar;
+          return `<span class="arabic-text-amiri-gold" dir="rtl" style="font-family: 'Amiri', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important; font-weight: 700 !important; font-size: 1.15em !important; display: inline-block;">${ar.trim()}</span>`;
+        });
+        return `<em class="book-ref-title">${safeP1}</em>`;
+      }
       return `<em class="book-ref-title">${p1}</em>`;
     });
+
+    // Protect Arabic inside parentheses from flipping
+    out = out.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!]{2,})\)/g, '(<span class="arabic-inline arabic-text-amiri-gold" dir="rtl" style="font-family: \'Amiri\', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important;">$1</span>)');
+    out = out.replace(/﴿([\u0600-\u06FF\s\.\,\?\:\!﴾﴿\(\)\[\]\-\d]+)﴾/g, '<span class="arabic-inline quran-verse arabic-text-amiri-gold" dir="rtl" style="font-family: \'Amiri\', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important;">﴿$1﴾</span>');
+    out = out.replace(/«([\u0600-\u06FF\s\.\,\?\:\!\(\)\[\]\-\d]+)»/g, '<span class="arabic-inline hadith-text arabic-text-amiri-gold" dir="rtl" style="font-family: \'Amiri\', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important;">«$1»</span>');
+
+    return out;
   }
 
   // ==========================================================================
