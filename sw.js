@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v92-ganti-romanized-kepada-arab-almarai';
+const CACHE_NAME = 'almasar-v93-bab5-ganti-romanized-kepada-arab-almarai';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
