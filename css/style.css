@@ -3548,6 +3548,37 @@ mark.content-search-match.active-match {
   flex: 1;
   letter-spacing: -0.01em;
   color: var(--text-primary, #f8fafc);
+  direction: ltr;
+  text-align: left;
+}
+
+.subheading-title .arabic-inline,
+.subheading-title .arabic-text-amiri-gold {
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
+  font-size: 1.25em !important;
+  font-weight: 700 !important;
+  color: var(--gold-light, #fde047) !important;
+  direction: rtl !important;
+  unicode-bidi: isolate !important;
+  padding: 0 4px !important;
+  display: inline-block !important;
+  line-height: 1.3 !important;
+  vertical-align: middle !important;
+}
+
+[data-theme="light"] .internal-subheading-card {
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.12) 0%, rgba(241, 245, 249, 0.85) 100%) !important;
+  border-left-color: #0284c7 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .subheading-title {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .subheading-title .arabic-inline,
+[data-theme="light"] .subheading-title .arabic-text-amiri-gold {
+  color: #92400e !important;
 }
 
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v82-harmoni-puisi-dan-luruskan-indent-terjemahan';
+const CACHE_NAME = 'almasar-v83-selaras-tajuk-khatimah-amiri';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
