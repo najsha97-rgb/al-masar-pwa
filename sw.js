@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v94-bab5-font-almarai-layer2-dan-semua-paparan';
+const CACHE_NAME = 'almasar-v95-mukadimah-st4-ringkasan-syakl-puisi';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
