@@ -1743,6 +1743,8 @@ document.addEventListener('DOMContentLoaded', () => {
       s = formatArabicAmiriGold(s);
       // 4. Protect Arabic inside parentheses so parentheses never flip
       s = s.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!]{2,})\)/g, '(<span class="arabic-inline arabic-text-amiri-gold" dir="rtl">$1</span>)');
+      // 5. Protect Arabic inside square brackets so citation brackets never flip
+      s = s.replace(/\[([\u0600-\u06FF\s\.\,\?\:\!\/\-\d]+)\]/g, '[<span class="arabic-inline arabic-text-amiri-gold" dir="rtl">$1</span>]');
       return s;
     }
 
