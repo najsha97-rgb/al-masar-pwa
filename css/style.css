@@ -699,6 +699,21 @@ body {
   line-height: 1.35;
 }
 
+.subtopic-title-ar-amiri-gold {
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
+  font-size: 1.18em !important;
+  font-weight: 700 !important;
+  color: var(--gold-light, #fde047) !important;
+  direction: rtl !important;
+  display: inline-block;
+  margin-left: 0.6rem;
+  vertical-align: baseline;
+}
+
+[data-theme="light"] .subtopic-title-ar-amiri-gold {
+  color: #92400e !important;
+}
+
 /* Reading Toolbar */
 .reading-toolbar {
   display: flex;

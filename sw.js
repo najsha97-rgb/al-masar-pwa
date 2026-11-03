@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v84-pastikan-tajuk-khatimah-semua-st-internal-card';
+const CACHE_NAME = 'almasar-v85-kemaskini-bab20-soalan-amiri-gold';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

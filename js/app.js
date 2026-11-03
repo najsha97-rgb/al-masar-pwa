@@ -282,7 +282,17 @@ document.addEventListener('DOMContentLoaded', () => {
         arTitleEl.style.display = 'none';
       }
     }
-    document.getElementById('subtopicMainTitle').textContent = sub.title;
+    const mainTitleEl = document.getElementById('subtopicMainTitle');
+    if (mainTitleEl) {
+      if (sub.title_ar && sub.title_ar.trim() !== '') {
+        const safeAr = sub.title_ar.trim().startsWith('(') && sub.title_ar.trim().endsWith(')')
+          ? sub.title_ar.trim()
+          : `(${sub.title_ar.trim()})`;
+        mainTitleEl.innerHTML = `<span class="subtopic-title-ms">${sub.title}</span> <span class="subtopic-title-ar-amiri-gold" dir="rtl">${safeAr}</span>`;
+      } else {
+        mainTitleEl.textContent = sub.title;
+      }
+    }
 
     // Active layer indicator text
     const modeBadge = document.getElementById('activeModeBadge');
