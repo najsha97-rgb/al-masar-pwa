@@ -1656,7 +1656,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.removeChild(textArea);
   }
 
-  // Helper to format text with proper Italic for Latin book titles, keeping Arabic upright and preventing flipped punctuation
+  // Helper to format text with proper Italic for Latin book titles vs translations, keeping Arabic upright and preventing flipped punctuation
   function formatSmartItalicHtml(str) {
     if (!str) return '';
     let out = str.replace(/\*(.*?)\*/g, (match, p1) => {
@@ -1665,13 +1665,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (arCount > 0 && arCount >= latinCount) {
         return `<span class="arabic-ref-title" dir="rtl" style="font-style: normal !important; transform: none !important; font-family: 'Amiri', serif;">${p1}</span>`;
       }
+
+      // Check if this is a translation or long quote passage rather than a book title
+      const isTranslationOrLongQuote = p1.length > 55 || p1.trim().startsWith('(') || /[\.\!\?]{2,}/.test(p1);
+
       if (/[\u0600-\u06FF]/.test(p1)) {
         const arWordRegex = /([\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u0652]+(?:\s+[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u0652]+)*)/g;
         const safeP1 = p1.replace(arWordRegex, function(ar) {
           if (!/[\u0600-\u06FF]/.test(ar)) return ar;
           return `<span class="arabic-text-amiri-gold" dir="rtl" style="font-family: 'Amiri', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important; font-weight: 700 !important; font-size: 1.15em !important; display: inline-block;">${ar.trim()}</span>`;
         });
+        if (isTranslationOrLongQuote) {
+          return `<em class="quote-trans-text">${safeP1}</em>`;
+        }
         return `<em class="book-ref-title">${safeP1}</em>`;
+      }
+
+      if (isTranslationOrLongQuote) {
+        return `<em class="quote-trans-text">${p1}</em>`;
       }
       return `<em class="book-ref-title">${p1}</em>`;
     });

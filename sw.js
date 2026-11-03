@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v81-syakl-puisi-gelaran-saw-ra-swt';
+const CACHE_NAME = 'almasar-v82-harmoni-puisi-dan-luruskan-indent-terjemahan';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
