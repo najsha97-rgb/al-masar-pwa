@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v80-selaras-rujukan-sumber-ringkasan';
+const CACHE_NAME = 'almasar-v81-syakl-puisi-gelaran-saw-ra-swt';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
