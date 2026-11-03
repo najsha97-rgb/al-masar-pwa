@@ -1,7 +1,7 @@
 {
   "name": "Al-Masar | Fiqh Perancangan Dakwah",
   "short_name": "Al-Masar",
-  "description": "Aplikasi Digital Fiqh Perancangan & Strategi Dakwah Harakah Islamiyah karya Syeikh Muhammad Ahmad Ar-Rasyid",
+  "description": "Aplikasi PWA Al-Masar (المَسَار) - Strategi, Polisi & Fiqh Perancangan Dakwah Harakah Islamiyah karya As-Syeikh Muhammad Ahmad ar-Rasyid rahimahullah.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0d1b2a",

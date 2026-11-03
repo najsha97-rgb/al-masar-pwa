@@ -810,34 +810,264 @@ body {
   font-family: 'Amiri', 'Traditional Arabic', serif !important;
 }
 
-/* Layer 2 Markdown Summary Specific Styling */
+/* ==========================================================================
+   Layer 2: Structured Exclusive Summary (Al-Masar Royal Theme)
+   ========================================================================== */
 .summary-container {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 1.8rem;
   box-shadow: var(--shadow-glow);
+  margin-bottom: 2rem;
 }
 
-.summary-container h4 {
+/* Header Card in Summary */
+.summary-header-card {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.25), rgba(15, 23, 42, 0.65));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 12px;
+  padding: 1.3rem 1.5rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.summary-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.summary-header-badge {
+  background: rgba(212, 175, 55, 0.18);
+  color: var(--gold-light, #f5c542);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
   font-family: 'Outfit', sans-serif;
-  color: var(--gold-light);
-  margin-top: 1.2rem;
-  margin-bottom: 0.5rem;
-  font-size: 1.15rem;
 }
 
-[data-theme="light"] .summary-container h4 {
-  color: #996515;
+.summary-layer-badge {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--sapphire-light, #38bdf8);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
 }
 
-.summary-container ul {
-  padding-left: 1.5rem;
+.summary-header-title {
+  margin: 0 0 0.4rem 0;
+  color: var(--gold-light, #f5c542);
+  font-size: 1.25rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.summary-header-meta {
+  color: var(--sapphire-light, #7dd3fc);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+/* Major Section Banners (I, II, III, IV) */
+.summary-section-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.35), rgba(15, 23, 42, 0.55));
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-left: 4px solid var(--gold-primary, #eab308);
+  border-radius: 10px;
+  padding: 0.75rem 1.15rem;
+  margin-top: 1.8rem;
   margin-bottom: 1rem;
 }
 
-.summary-container li {
-  margin-bottom: 0.4rem;
+.summary-section-badge {
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+  color: #060e20;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 2px 9px;
+  border-radius: 6px;
+  min-width: 28px;
+  text-align: center;
+  font-family: 'Outfit', sans-serif;
+}
+
+.summary-section-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.summary-section-title {
+  margin: 0;
+  color: var(--gold-light, #fde047);
+  font-size: 1.15rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* Sub-headings */
+.summary-subhead {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--sapphire-light, #38bdf8);
+  margin: 1.1rem 0 0.5rem 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-subhead::before {
+  content: "▫️";
+  font-size: 0.75rem;
+}
+
+/* Bullet & Ordered Lists with Proper Indentation */
+.summary-bullet-list {
+  margin: 0.6rem 0 1.1rem 0;
+  padding-left: 1.6rem;
+  list-style-type: disc;
+  color: var(--text-main);
+  line-height: 1.8;
+  font-size: 1.02rem;
+}
+
+.summary-bullet-list li {
+  margin-bottom: 0.65rem;
+  padding-left: 0.25rem;
+  text-align: justify;
+}
+
+.summary-ordered-list {
+  margin: 0.6rem 0 1.1rem 0;
+  padding-left: 1.8rem;
+  list-style-type: decimal;
+  color: var(--text-main);
+  line-height: 1.8;
+  font-size: 1.02rem;
+}
+
+.summary-ordered-list li {
+  margin-bottom: 0.65rem;
+  padding-left: 0.25rem;
+  text-align: justify;
+}
+
+/* Standard Paragraphs & Quotes in Summary */
+.summary-para {
+  line-height: 1.8;
+  margin-bottom: 0.85rem;
+  text-align: justify;
+  color: var(--text-main);
+  font-size: 1.02rem;
+}
+
+.summary-quote-box {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-left: 3px solid var(--gold-light, #fde047);
+  border-radius: 0 10px 10px 0;
+  padding: 0.9rem 1.25rem;
+  margin: 1rem 0 1.2rem 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.summary-quote-mark {
+  color: var(--gold-light, #fde047);
+  font-size: 1.8rem;
+  line-height: 1;
+  font-family: Georgia, serif;
+  user-select: none;
+}
+
+.summary-quote-content {
+  font-style: italic;
+  line-height: 1.75;
+  color: var(--text-main);
+  flex: 1;
+}
+
+/* Typography Helpers in Summary */
+.summary-bold {
+  color: var(--gold-light, #fde047);
+  font-weight: 700;
+}
+
+.arabic-text-amiri-gold {
+  font-family: 'Amiri', serif !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  color: var(--gold-light, #fde047) !important;
+  font-size: 1.18em !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Light Mode Overrides for Summary */
+[data-theme="light"] .summary-container {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .summary-header-card {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-color: #bae6fd;
+}
+
+[data-theme="light"] .summary-header-title {
+  color: #0369a1;
+}
+
+[data-theme="light"] .summary-header-meta {
+  color: #475569;
+}
+
+[data-theme="light"] .summary-section-banner {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-color: #cbd5e1;
+  border-left-color: #d97706;
+}
+
+[data-theme="light"] .summary-section-badge {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  color: #ffffff;
+}
+
+[data-theme="light"] .summary-section-title {
+  color: #92400e;
+}
+
+[data-theme="light"] .summary-subhead {
+  color: #0284c7;
+}
+
+[data-theme="light"] .summary-quote-box {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  border-left-color: #d97706;
+}
+
+[data-theme="light"] .summary-bold {
+  color: #92400e;
+}
+
+[data-theme="light"] .arabic-text-amiri-gold {
+  color: #b45309 !important;
 }
 
 /* Reader Bottom Navigation */

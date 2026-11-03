@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v75-tamayyuz-tasayyub';
+const CACHE_NAME = 'almasar-v76-ringkasan-kemas';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

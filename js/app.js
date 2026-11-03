@@ -480,24 +480,40 @@ document.addEventListener('DOMContentLoaded', () => {
         contentBody.innerHTML = '<p class="text-muted">Tiada teks lanjutan bagi bahagian ini.</p>';
       }
     } else {
-      // LAYER 2: Structured Exclusive Summary
+      // LAYER 2: Structured Exclusive Summary (Enjin Matang & Terpelihara)
       const summaryBox = document.createElement('div');
       summaryBox.className = 'summary-container';
 
       if (sub.summary && sub.summary.trim() !== '') {
-        // Convert simple markdown bullets and bold into HTML
-        const bolded = sub.summary.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-        let htmlContent = formatSmartItalicHtml(bolded)
-          .replace(/\n\*\s/g, '</li><li>')
-          .replace(/\n-\s/g, '</li><li>');
+        const subDisplayNumber = state.currentSubtopic + 1;
+        let displaySubTitle = sub.title;
+        const cleanChName = ch.title.replace(/^BAB\s+\d+:\s*/i, '').replace(/^MUKADIMAH:\s*/i, '').trim();
 
-        htmlContent = htmlContent.replace(/\n\n/g, '<br><br>');
-        summaryBox.innerHTML = `<div>${htmlContent}</div>`;
+        const renderedContent = renderStructuredSummaryHtml(sub.summary);
+
+        summaryBox.innerHTML = `
+          <div class="summary-header-card">
+            <div class="summary-header-top">
+              <span class="summary-header-badge">${ch.number ? ch.number.toUpperCase() : 'BAB'} • SUBTOPIK ${subDisplayNumber}</span>
+              <span class="summary-layer-badge">⚡ Layer 2: Ringkasan Eksklusif</span>
+            </div>
+            <h3 class="summary-header-title">
+              INTISARI &amp; FIQH HARAKI: SUBTOPIK ${subDisplayNumber} — ${displaySubTitle.toUpperCase()}
+            </h3>
+            <div class="summary-header-meta">
+              ${ch.number}: ${cleanChName} — Fiqh Perancangan &amp; Polisi Harakah
+            </div>
+          </div>
+          <div class="summary-body">
+            ${renderedContent}
+          </div>
+        `;
       } else {
         summaryBox.innerHTML = `
-          <div style="text-align: center; padding: 2rem;">
-            <p style="color: var(--gold-light); font-weight: 600;">Ringkasan Eksklusif Sedang Dikemas Kini</p>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Sahabat boleh meneliti versi lengkap (Layer 1) sementara ringkasan dimantapkan sepenuhnya.</p>
+          <div style="text-align: center; padding: 2.5rem; background: rgba(15, 23, 42, 0.4); border-radius: 12px; border: 1px dashed rgba(56, 189, 248, 0.3);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">📖</div>
+            <p style="color: var(--gold-light); font-weight: 700; font-size: 1.15rem; margin-bottom: 0.5rem;">Ringkasan Eksklusif Sedang Dimurnikan</p>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">Sahabat boleh meneliti versi lengkap terjemahan penuh (Layer 1) sementara intisari ilmiah bahagian ini diselaraskan sepenuhnya.</p>
           </div>
         `;
       }
@@ -1560,6 +1576,151 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return `<em class="book-ref-title">${p1}</em>`;
     });
+  }
+
+  // ==========================================================================
+  // Layer 2 Markdown Summary Parser (Enjin Berstruktur Al-Masar)
+  // ==========================================================================
+  function formatArabicAmiriGold(text) {
+    if (!text) return '';
+    const arRegex = /([\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u0652]+(?:\s+[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\u064B-\u0652]+)*)/g;
+    return text.replace(arRegex, (match, ar) => {
+      return `<span class="arabic-text-amiri-gold" dir="rtl">${ar}</span>`;
+    });
+  }
+
+  function renderStructuredSummaryHtml(summaryText) {
+    if (!summaryText || !summaryText.trim()) return '';
+
+    const cleaned = summaryText.replace(/^[ \t]*\|[ \t]*Halaman\s+Asal.*$/gm, '');
+    const lines = cleaned.split('\n');
+    const output = [];
+
+    let inBulletList = false;
+    let inNumList = false;
+
+    const sectionIcons = {
+      'I': '🎯',
+      'II': '📐',
+      'III': '📜',
+      'IV': '⚡',
+      'V': '💎',
+      'VI': '🧭'
+    };
+
+    function closeLists() {
+      const res = [];
+      if (inBulletList) {
+        res.push('</ul>');
+        inBulletList = false;
+      }
+      if (inNumList) {
+        res.push('</ol>');
+        inNumList = false;
+      }
+      return res;
+    }
+
+    function formatInlineSummary(lineStr) {
+      // 1. Format bold **text**
+      let s = lineStr.replace(/\*\*(.*?)\*\*/g, '<strong class="summary-bold">$1</strong>');
+      // 2. Format inline italic *text* (clean standard italic, avoids collision)
+      s = s.replace(/(?<!\*)\*(?!\s)([^\*\r\n]+?)(?<!\s)\*(?!\*)/g, (match, inner) => {
+        const arChars = (inner.match(/[\u0600-\u06FF]/g) || []).length;
+        const latinChars = (inner.match(/[a-zA-Z]/g) || []).length;
+        if (arChars > 0 && arChars >= latinChars) {
+          return `<span class="arabic-text-amiri-gold" dir="rtl">${inner}</span>`;
+        }
+        return `<em>${inner}</em>`;
+      });
+      // 3. Highlight Arabic terms with Amiri Gold
+      s = formatArabicAmiriGold(s);
+      return s;
+    }
+
+    for (let rawLine of lines) {
+      const l = rawLine.trim();
+      if (!l || l === '---' || l === '–' || l === '—' || l.startsWith('---')) {
+        continue;
+      }
+
+      // Major Section Header (* **I. Intipati...**)
+      const secMatch = l.match(/^\*?\s*\*\*(I|II|III|IV|V|VI)\.\s*(.*?)\*\*:?$/);
+      if (secMatch) {
+        output.push(...closeLists());
+        const secNum = secMatch[1];
+        const secTitle = secMatch[2].trim();
+        const icon = sectionIcons[secNum] || '📌';
+        output.push(`
+          <div class="summary-section-banner">
+            <span class="summary-section-badge">${secNum}</span>
+            <span class="summary-section-icon">${icon}</span>
+            <h4 class="summary-section-title">${secTitle}</h4>
+          </div>
+        `);
+        continue;
+      }
+
+      // Sub-heading with bold (* **Trilogi Polisi...**)
+      const subHeadingMatch = l.match(/^\*?\s*\*\*([^*]+?)\*\*:?$/);
+      if (subHeadingMatch && !l.match(/^\d+\./)) {
+        output.push(...closeLists());
+        const subTitle = subHeadingMatch[1].trim();
+        output.push(`<h5 class="summary-subhead">${formatInlineSummary(subTitle)}</h5>`);
+        continue;
+      }
+
+      // Blockquote / Quote (> *"..."* or * "..."*)
+      const quoteMatch = l.match(/^(?:>&gt;|&gt;|>|\*)\s*["“\'](.*)["”\']\*?$/);
+      if (quoteMatch || l.startsWith('>') || l.startsWith('&gt;')) {
+        output.push(...closeLists());
+        const qText = l.replace(/^[>&gt;* ]+/, '').replace(/^["“']|["”'*]+$/g, '').trim();
+        output.push(`
+          <blockquote class="summary-quote-box">
+            <span class="summary-quote-mark">“</span>
+            <div class="summary-quote-content">${formatInlineSummary(qText)}</div>
+          </blockquote>
+        `);
+        continue;
+      }
+
+      // Numbered List (1. *as-Siyasah...*)
+      const numMatch = l.match(/^(\d+)\.\s+(.*)$/);
+      if (numMatch) {
+        if (inBulletList) {
+          output.push('</ul>');
+          inBulletList = false;
+        }
+        if (!inNumList) {
+          output.push('<ol class="summary-ordered-list">');
+          inNumList = true;
+        }
+        output.push(`<li>${formatInlineSummary(numMatch[2])}</li>`);
+        continue;
+      }
+
+      // Bullet List (* text or - text or • text)
+      const bulletMatch = l.match(/^[\*\-•]\s+(.*)$/);
+      if (bulletMatch) {
+        if (inNumList) {
+          output.push('</ol>');
+          inNumList = false;
+        }
+        if (!inBulletList) {
+          output.push('<ul class="summary-bullet-list">');
+          inBulletList = true;
+        }
+        output.push(`<li>${formatInlineSummary(bulletMatch[1])}</li>`);
+        continue;
+      }
+
+      // Normal paragraph
+      output.push(...closeLists());
+      output.push(`<p class="summary-para">${formatInlineSummary(l)}</p>`);
+    }
+
+    output.push(...closeLists());
+    return output.join('\n');
   }
 
   // Initial Boot
