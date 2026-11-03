@@ -318,6 +318,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
           }
 
+          // 1.5. Internal Thematic Subheading (e.g. ### Header or **Header (Arabic)**)
+          const isHeading = (trimmed.startsWith('### ') || (trimmed.startsWith('**') && trimmed.endsWith('**') && !trimmed.includes('\n') && trimmed.length < 220));
+          const startsWithLatin = /^[#\*\s]*[a-zA-Z]/.test(trimmed);
+
+          if (isHeading && startsWithLatin) {
+            const card = document.createElement('div');
+            card.className = 'internal-subheading-card';
+            const cleanHeader = trimmed.replace(/^###\s*/, '').replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
+            card.innerHTML = `<span class="subheading-accent" aria-hidden="true"></span><span class="subheading-title">${formatSmartItalicHtml(cleanHeader)}</span>`;
+            contentBody.appendChild(card);
+            return;
+          }
+
           // 2. Intelligent Multi-line Grouping (Quran / Hadith / Syair Arab + Malay Translation)
           // Normalize <br> to \n so mixed paragraphs split reliably
           const normalizedPara = para.replace(/<br\s*\/?>/gi, '\n');
@@ -328,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!l || l === '>') continue;
             const arC = (l.match(/[\u0600-\u06FF]/g) || []).length;
             const latC = (l.match(/[a-zA-Z]/g) || []).length;
-            const isLineArabic = arC > 6 && arC > latC;
+            const isLineArabic = !/^[#\*\s]*[a-zA-Z]/.test(l) && arC > 6 && arC > latC;
             const gtype = isLineArabic ? 'ar' : 'lat';
             if (groups.length === 0 || groups[groups.length - 1].type !== gtype) {
               groups.push({ type: gtype, lines: [l] });
@@ -378,47 +391,37 @@ document.addEventListener('DOMContentLoaded', () => {
           // Case C: Standard Latin or Other Paragraphs
           const p = document.createElement('p');
           
-          // Check for internal thematic subheadings first (e.g. ### Header or **Header (Arabic)**)
-          const isHeading = (para.startsWith('### ') || (para.startsWith('**') && para.endsWith('**') && !para.includes('\n') && para.length < 180));
-          const startsWithLatin = /^[#\*\s]*[a-zA-Z]/.test(para);
+          // Fallback check if contains mostly Arabic
+          const arabicChars = (para.match(/[\u0600-\u06FF]/g) || []).length;
+          const latinChars = (para.match(/[a-zA-Z]/g) || []).length;
+          const isMainlyArabic = !startsWithLatin && arabicChars > 0 && arabicChars >= latinChars;
 
-          if (isHeading && startsWithLatin) {
-            p.className = 'internal-subheading-card';
-            const cleanHeader = para.replace(/^###\s*/, '').replace(/^\*\*/, '').replace(/\*\*$/, '').trim();
-            p.innerHTML = `<span class="subheading-accent" aria-hidden="true"></span><span class="subheading-title">${formatSmartItalicHtml(cleanHeader)}</span>`;
+          if (isMainlyArabic) {
+            p.className = 'arabic-text';
+            p.setAttribute('dir', 'rtl');
+            const cleanText = para.replace(/^[>\s]+/, '');
+            p.innerHTML = formatArabicPoetryOrLine(cleanText);
+          } else if (para.startsWith('“') || para.startsWith('"') || para.includes('berkata:') || para.includes('pesan:')) {
+            p.className = 'quote-highlight-box';
+            p.innerHTML = formatQuoteText(para);
           } else {
-            // Fallback check if contains mostly Arabic
-            const arabicChars = (para.match(/[\u0600-\u06FF]/g) || []).length;
-            const latinChars = (para.match(/[a-zA-Z]/g) || []).length;
-            const isMainlyArabic = !startsWithLatin && arabicChars > 0 && arabicChars >= latinChars;
-
-            if (isMainlyArabic) {
-              p.className = 'arabic-text';
-              p.setAttribute('dir', 'rtl');
-              const cleanText = para.replace(/^[>\s]+/, '');
-              p.innerHTML = formatArabicPoetryOrLine(cleanText);
-            } else if (para.startsWith('“') || para.startsWith('"') || para.includes('berkata:') || para.includes('pesan:')) {
-              p.className = 'quote-highlight-box';
-              p.innerHTML = formatQuoteText(para);
+            // Check for numbered list item (e.g. 1. **Dua Peringkat...:** Penjelasan...)
+            const numMatch = para.match(/^(\d+)\.\s+\*\*(.*?)\*\*:?\s*(.*)$/);
+            if (numMatch) {
+              p.className = 'numbered-item-card';
+              const titleHtml = formatSmartItalicHtml(numMatch[2]);
+              let descHtml = formatSmartItalicHtml(numMatch[3].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
+              p.innerHTML = `
+                <div class="num-card-badge">${numMatch[1]}</div>
+                <div class="num-card-content">
+                  <div class="num-card-title">${titleHtml}</div>
+                  <div class="num-card-desc">${descHtml}</div>
+                </div>
+              `;
             } else {
-              // Check for numbered list item (e.g. 1. **Dua Peringkat...:** Penjelasan...)
-              const numMatch = para.match(/^(\d+)\.\s+\*\*(.*?)\*\*:?\s*(.*)$/);
-              if (numMatch) {
-                p.className = 'numbered-item-card';
-                const titleHtml = formatSmartItalicHtml(numMatch[2]);
-                let descHtml = formatSmartItalicHtml(numMatch[3].replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'));
-                p.innerHTML = `
-                  <div class="num-card-badge">${numMatch[1]}</div>
-                  <div class="num-card-content">
-                    <div class="num-card-title">${titleHtml}</div>
-                    <div class="num-card-desc">${descHtml}</div>
-                  </div>
-                `;
-              } else {
-                // Standard paragraph with markdown formatting (bold, italic)
-                const bolded = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                p.innerHTML = formatSmartItalicHtml(bolded);
-              }
+              // Standard paragraph with markdown formatting (bold, italic)
+              const bolded = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+              p.innerHTML = formatSmartItalicHtml(bolded);
             }
           }
           contentBody.appendChild(p);

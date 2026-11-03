@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v83-selaras-tajuk-khatimah-amiri';
+const CACHE_NAME = 'almasar-v84-pastikan-tajuk-khatimah-semua-st-internal-card';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
