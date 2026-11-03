@@ -1708,6 +1708,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Protect Arabic inside parentheses from flipping
     out = out.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!]{2,})\)/g, '(<span class="arabic-inline arabic-text-amiri-gold" dir="rtl" style="font-family: \'Amiri\', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important;">$1</span>)');
+    
+    // Format any Arabic segment within mixed parentheses (e.g. "Titik Tolak / المنطلق") using Almarai
+    out = out.replace(/\(([^)]*?)([\u0600-\u06FF][\u0600-\u06FF\s\.\,\?\:\!\-\d]*)([^)]*?)\)/g, function(match, before, ar, after) {
+      if (!ar.trim()) return match;
+      if (before.includes('<span') || after.includes('</span>')) return match;
+      return `(${before}<span class="arabic-inline-almarai" dir="rtl">${ar.trim()}</span>${after})`;
+    });
     out = out.replace(/﴿([\u0600-\u06FF\s\.\,\?\:\!﴾﴿\(\)\[\]\-\d]+)﴾/g, '<span class="arabic-inline quran-verse arabic-text-amiri-gold" dir="rtl" style="font-family: \'Amiri\', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important;">﴿$1﴾</span>');
     out = out.replace(/«([\u0600-\u06FF\s\.\,\?\:\!\(\)\[\]\-\d]+)»/g, '<span class="arabic-inline hadith-text arabic-text-amiri-gold" dir="rtl" style="font-family: \'Amiri\', serif !important; color: var(--gold-light, #fde047) !important; font-style: normal !important;">«$1»</span>');
 

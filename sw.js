@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v85-kemaskini-bab20-soalan-amiri-gold';
+const CACHE_NAME = 'almasar-v86-cuba-font-almarai-bab20';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
