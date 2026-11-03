@@ -1699,7 +1699,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!summaryText || !summaryText.trim()) return '';
 
     const cleaned = summaryText.replace(/^[ \t]*\|[ \t]*Halaman\s+Asal.*$/gm, '');
-    const lines = cleaned.split('\n');
+    const rawLines = cleaned.split('\n');
     const output = [];
 
     let inBulletList = false;
@@ -1746,11 +1746,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return s;
     }
 
-    for (let rawLine of lines) {
-      const l = rawLine.trim();
-      if (!l || l === '---' || l === '–' || l === '—' || l.startsWith('---')) {
-        continue;
-      }
+    const lines = cleaned.split('\n').map(l => l.trim()).filter(l => l && l !== '---' && l !== '–' && l !== '—' && !l.startsWith('---'));
+
+    let i = 0;
+    while (i < lines.length) {
+      const l = lines[i];
 
       // Major Section Header (* **I. Intipati...**)
       const secMatch = l.match(/^\*?\s*\*\*(I|II|III|IV|V|VI)\.\s*(.*?)\*\*:?$/);
@@ -1766,6 +1766,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h4 class="summary-section-title">${secTitle}</h4>
           </div>
         `);
+        i++;
         continue;
       }
 
@@ -1775,6 +1776,7 @@ document.addEventListener('DOMContentLoaded', () => {
         output.push(...closeLists());
         const subTitle = subHeadingMatch[1].trim();
         output.push(`<h5 class="summary-subhead">${formatInlineSummary(subTitle)}</h5>`);
+        i++;
         continue;
       }
 
@@ -1785,45 +1787,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (isArabicDominant) {
         output.push(...closeLists());
-        let cleanAr = l.replace(/^[>&gt;*•\-\s]+/, '').trim();
-        if (cleanAr.startsWith('(') && cleanAr.endsWith(')')) {
-          cleanAr = cleanAr.slice(1, -1).trim();
+
+        // Himpun semua baris Arab berturutan ke dalam SATU kad diraja tunggal (seperti Mutiara Hikmah)
+        const arLinesGroup = [];
+        while (i < lines.length) {
+          const currL = lines[i];
+          const cAr = (currL.match(/[\u0600-\u06FF]/g) || []).length;
+          const cLat = (currL.match(/[a-zA-Z]/g) || []).length;
+          if (cAr >= 5 && cAr > cLat) {
+            arLinesGroup.push(currL);
+            i++;
+          } else {
+            break;
+          }
         }
 
-        // Check if couplet (contains ... or … or /)
-        if (cleanAr.includes('/') || cleanAr.includes('...') || cleanAr.includes('…')) {
-          const couplets = cleanAr.split(/\s*\/\s*/);
-          couplets.forEach(cStr => {
+        let isPoemGroup = false;
+        const parsedVerseLines = [];
+
+        arLinesGroup.forEach(rawAr => {
+          let cleanAr = rawAr.replace(/^[>&gt;*•\-\s]+/, '').trim();
+          if (cleanAr.startsWith('«') && cleanAr.endsWith('»')) {
+            cleanAr = cleanAr.slice(1, -1).trim();
+          } else if (cleanAr.startsWith('(') && cleanAr.endsWith(')')) {
+            cleanAr = cleanAr.slice(1, -1).trim();
+          }
+
+          // Sekiranya bait syair mengandungi pembahagi rangkap '/'
+          const subCouplets = cleanAr.includes('/') ? cleanAr.split(/\s*\/\s*/) : [cleanAr];
+          subCouplets.forEach(cStr => {
             const cTrim = cStr.trim();
             if (!cTrim) return;
             const sepMatch = cTrim.match(/^(.*?)\s*(\.{2,4}|…|\.\.\s+\.\.)\s*(.*?)$/);
             if (sepMatch) {
-              const sadr = sepMatch[1].trim();
-              const ajuz = sepMatch[3].trim();
-              output.push(`
-                <div class="summary-ar-couplet-card" dir="rtl">
-                  <span class="ar-sadr" dir="rtl">${sadr}</span>
+              isPoemGroup = true;
+              const sadr = formatInlineSummary(sepMatch[1].trim());
+              const ajuz = formatInlineSummary(sepMatch[3].trim());
+              parsedVerseLines.push(`
+                <div class="ar-verse-line" dir="rtl">
+                  <span class="ar-sadr-inline">${sadr}</span>
                   <span class="ar-verse-dots" aria-hidden="true">...</span>
-                  <span class="ar-ajuz" dir="rtl">${ajuz}</span>
+                  <span class="ar-ajuz-inline">${ajuz}</span>
                 </div>
               `);
             } else {
-              output.push(`
-                <div class="summary-ar-quote-card" dir="rtl">
-                  <div class="ar-quote-text" dir="rtl">${cTrim}</div>
-                </div>
+              parsedVerseLines.push(`
+                <div class="ar-verse-line" dir="rtl">${formatInlineSummary(cTrim)}</div>
               `);
             }
           });
-          continue;
-        } else {
-          output.push(`
-            <div class="summary-ar-quote-card" dir="rtl">
-              <div class="ar-quote-text" dir="rtl">${cleanAr}</div>
-            </div>
-          `);
-          continue;
-        }
+        });
+
+        const cardClass = isPoemGroup ? 'summary-ar-quote-card summary-ar-poem-card' : 'summary-ar-quote-card';
+        output.push(`
+          <div class="${cardClass}" dir="rtl">
+            ${parsedVerseLines.join('\n')}
+          </div>
+        `);
+        continue;
       }
 
       // Blockquote / Quote (> *"..."* or * "..."*)
@@ -1837,6 +1858,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="summary-quote-content">${formatInlineSummary(qText)}</div>
           </blockquote>
         `);
+        i++;
         continue;
       }
 
@@ -1852,6 +1874,7 @@ document.addEventListener('DOMContentLoaded', () => {
           inNumList = true;
         }
         output.push(`<li>${formatInlineSummary(numMatch[2])}</li>`);
+        i++;
         continue;
       }
 
@@ -1867,12 +1890,14 @@ document.addEventListener('DOMContentLoaded', () => {
           inBulletList = true;
         }
         output.push(`<li>${formatInlineSummary(bulletMatch[1])}</li>`);
+        i++;
         continue;
       }
 
       // Normal paragraph
       output.push(...closeLists());
       output.push(`<p class="summary-para">${formatInlineSummary(l)}</p>`);
+      i++;
     }
 
     output.push(...closeLists());
