@@ -4,7 +4,7 @@
    Identiti Visual: Royal Sapphire Navy & Radiant Amber Gold
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   /* Dark Theme (Default) - Deep Cosmic Midnight Sapphire */
@@ -1146,9 +1146,20 @@ body {
   margin: 0 0 0.4rem 0;
   color: var(--gold-light, #f5c542);
   font-size: 1.25rem;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Outfit', 'Almarai', sans-serif;
   font-weight: 700;
   line-height: 1.4;
+}
+
+.summary-header-title .arabic-inline-almarai,
+.summary-header-title [dir="rtl"] {
+  font-family: 'Almarai', sans-serif !important;
+  font-size: 0.9em !important;
+  font-weight: 700 !important;
+  color: var(--gold-light, #fde047) !important;
+  display: inline-block;
+  direction: rtl !important;
+  vertical-align: baseline;
 }
 
 .summary-header-meta {

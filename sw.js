@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v93-bab5-ganti-romanized-kepada-arab-almarai';
+const CACHE_NAME = 'almasar-v94-bab5-font-almarai-layer2-dan-semua-paparan';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

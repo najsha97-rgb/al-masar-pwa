@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         subBtn.className = `subtopic-nav-btn ${chIdx === state.currentChapter && sIdx === state.currentSubtopic ? 'active-sub' : ''}`;
         subBtn.innerHTML = `
           <span class="subtopic-num">${sIdx + 1}.</span>
-          <span class="subtopic-title-text">${sub.title}</span>
+          <span class="subtopic-title-text">${sub.title.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!ـ]+)\)/g, '(<span class="arabic-inline-almarai" dir="rtl">$1</span>)')}</span>
         `;
         subBtn.title = sub.title;
 
@@ -290,7 +290,11 @@ document.addEventListener('DOMContentLoaded', () => {
           : `(${sub.title_ar.trim()})`;
         mainTitleEl.innerHTML = `<span class="subtopic-title-ms">${sub.title}</span> <span class="subtopic-title-ar-amiri-gold" dir="rtl">${safeAr}</span>`;
       } else {
-        mainTitleEl.textContent = sub.title;
+        if (/\(([\u0600-\u06FF\s\.\,\?\:\!ـ]+)\)/.test(sub.title)) {
+          mainTitleEl.innerHTML = sub.title.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!ـ]+)\)/g, '(<span class="arabic-inline-almarai" dir="rtl">$1</span>)');
+        } else {
+          mainTitleEl.textContent = sub.title;
+        }
       }
     }
 
@@ -575,6 +579,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const renderedContent = renderStructuredSummaryHtml(sub.summary);
 
+        const subArMatch = displaySubTitle.match(/^(.*?)\s*(\([\u0600-\u06FF\s\.\,\?\:\!ـ]+\))\s*$/);
+        let formattedSummaryHeaderTitle;
+        if (subArMatch) {
+          const latinPart = subArMatch[1].toUpperCase();
+          const arPart = subArMatch[2];
+          const arStyled = arPart.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!ـ]+)\)/, '(<span class="arabic-inline-almarai" dir="rtl">$1</span>)');
+          formattedSummaryHeaderTitle = `INTISARI &amp; FIQH HARAKI: SUBTOPIK ${subDisplayNumber} — ${latinPart} ${arStyled}`;
+        } else {
+          formattedSummaryHeaderTitle = `INTISARI &amp; FIQH HARAKI: SUBTOPIK ${subDisplayNumber} — ${displaySubTitle.toUpperCase()}`;
+        }
+
         summaryBox.innerHTML = `
           <div class="summary-header-card">
             <div class="summary-header-top">
@@ -582,7 +597,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <span class="summary-layer-badge">⚡ Layer 2: Ringkasan Eksklusif</span>
             </div>
             <h3 class="summary-header-title">
-              INTISARI &amp; FIQH HARAKI: SUBTOPIK ${subDisplayNumber} — ${displaySubTitle.toUpperCase()}
+              ${formattedSummaryHeaderTitle}
             </h3>
             <div class="summary-header-meta">
               ${ch.number}: ${cleanChName} — Fiqh Perancangan &amp; Polisi Harakah
