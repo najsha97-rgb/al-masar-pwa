@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.setAttribute('dir', 'rtl');
             const cleanText = para.replace(/^[>\s]+/, '');
             p.innerHTML = formatArabicPoetryOrLine(cleanText);
-          } else if (para.startsWith('“') || para.startsWith('"') || para.includes('berkata:') || para.includes('pesan:')) {
+          } else if (trimmed.startsWith('“') || trimmed.startsWith('"') || trimmed.startsWith('«') || trimmed.startsWith('”') || trimmed.startsWith('>')) {
             p.className = 'quote-highlight-box';
             p.innerHTML = formatQuoteText(para);
           } else {
@@ -430,6 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
               `;
             } else {
               // Standard paragraph with markdown formatting (bold, italic)
+              p.className = 'reader-paragraph';
               const bolded = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
               p.innerHTML = formatSmartItalicHtml(bolded);
             }

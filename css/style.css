@@ -985,12 +985,21 @@ body {
   white-space: nowrap !important;
 }
 
-.quote-highlight-box .tokoh-name {
+.reader-paragraph {
+  margin-bottom: 1.25rem;
+  text-align: justify;
+  line-height: 1.85;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.quote-highlight-box .tokoh-name,
+.tokoh-name {
   font-style: normal;
   font-weight: 700;
   color: var(--emerald-primary);
-  display: block;
-  margin-bottom: 4px;
+  display: inline;
+  margin: 0 2px;
 }
 
 /* Ensure any Arabic text inside quotes is NEVER italicized */
