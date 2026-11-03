@@ -1207,10 +1207,131 @@ body {
   flex: 1;
 }
 
+/* Summary Arabic Quote Card (Diraja Gold Accent RTL) */
+.summary-ar-quote-card {
+  background: linear-gradient(270deg, rgba(212, 175, 55, 0.1) 0%, rgba(15, 23, 42, 0.45) 100%);
+  border-right: 3px solid var(--gold-primary, #eab308);
+  border-radius: 8px 0 0 8px;
+  padding: 0.8rem 1.25rem;
+  margin: 0.5rem 0 1rem 0;
+  direction: rtl !important;
+  text-align: right !important;
+  text-align-last: right !important;
+  -webkit-text-align-last: right !important;
+  unicode-bidi: isolate !important;
+  box-sizing: border-box;
+}
+
+[data-theme="light"] .summary-ar-quote-card {
+  background: linear-gradient(270deg, rgba(212, 175, 55, 0.12) 0%, rgba(248, 250, 252, 0.85) 100%);
+  border-right: 3px solid #b38600;
+}
+
+.summary-ar-quote-card .ar-quote-text {
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
+  color: var(--gold-light, #fde047) !important;
+  font-size: 1.28rem !important;
+  line-height: 2 !important;
+  direction: rtl !important;
+  text-align: right !important;
+  text-align-last: right !important;
+  font-style: normal !important;
+}
+
+[data-theme="light"] .summary-ar-quote-card .ar-quote-text {
+  color: #8c6b00 !important;
+}
+
+/* Summary Arabic Poetry Couplet Card (Nizham asy-Syathrain in Layer 2) */
+.summary-ar-couplet-card {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background: linear-gradient(270deg, rgba(212, 175, 55, 0.08) 0%, rgba(15, 23, 42, 0.45) 100%);
+  border-right: 3px solid var(--gold-primary, #eab308);
+  border-radius: 8px 0 0 8px;
+  padding: 0.65rem 1.2rem;
+  margin: 0.5rem 0 0.9rem 0;
+  direction: rtl !important;
+  font-family: 'Amiri', 'Traditional Arabic', serif !important;
+  font-size: 1.25rem !important;
+  line-height: 2 !important;
+  color: var(--gold-light, #fde047) !important;
+  box-sizing: border-box !important;
+}
+
+[data-theme="light"] .summary-ar-couplet-card {
+  background: linear-gradient(270deg, rgba(212, 175, 55, 0.12) 0%, rgba(248, 250, 252, 0.85) 100%);
+  border-right: 3px solid #b38600;
+  color: #8c6b00 !important;
+}
+
+.summary-ar-couplet-card .ar-sadr {
+  flex: 1 1 45% !important;
+  text-align: right !important;
+  text-align-last: right !important;
+  -webkit-text-align-last: right !important;
+  direction: rtl !important;
+  unicode-bidi: isolate !important;
+  font-style: normal !important;
+}
+
+.summary-ar-couplet-card .ar-verse-dots {
+  flex: 0 0 auto !important;
+  padding: 0 1rem !important;
+  color: var(--gold-primary, #d97706) !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  user-select: none !important;
+  opacity: 0.85;
+}
+
+.summary-ar-couplet-card .ar-ajuz {
+  flex: 1 1 45% !important;
+  text-align: left !important;
+  text-align-last: left !important;
+  -webkit-text-align-last: left !important;
+  direction: rtl !important;
+  unicode-bidi: isolate !important;
+  font-style: normal !important;
+}
+
+@media (max-width: 640px) {
+  .summary-ar-couplet-card {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+  }
+  .summary-ar-couplet-card .ar-sadr,
+  .summary-ar-couplet-card .ar-ajuz {
+    width: 100% !important;
+    text-align: right !important;
+    text-align-last: right !important;
+    -webkit-text-align-last: right !important;
+  }
+  .summary-ar-couplet-card .ar-verse-dots {
+    display: none !important;
+  }
+}
+
 /* Typography Helpers in Summary */
 .summary-bold {
   color: var(--gold-light, #fde047);
   font-weight: 700;
+}
+
+.summary-container em {
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: var(--sapphire-light, #7dd3fc) !important;
+  display: inline !important;
+  transform: none !important;
+  letter-spacing: normal !important;
+}
+
+[data-theme="light"] .summary-container em {
+  color: #0284c7 !important;
 }
 
 .arabic-text-amiri-gold {

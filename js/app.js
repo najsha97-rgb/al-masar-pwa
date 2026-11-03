@@ -1741,6 +1741,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       // 3. Highlight Arabic terms with Amiri Gold
       s = formatArabicAmiriGold(s);
+      // 4. Protect Arabic inside parentheses so parentheses never flip
+      s = s.replace(/\(([\u0600-\u06FF\s\.\,\?\:\!]{2,})\)/g, '(<span class="arabic-inline arabic-text-amiri-gold" dir="rtl">$1</span>)');
       return s;
     }
 
@@ -1774,6 +1776,54 @@ document.addEventListener('DOMContentLoaded', () => {
         const subTitle = subHeadingMatch[1].trim();
         output.push(`<h5 class="summary-subhead">${formatInlineSummary(subTitle)}</h5>`);
         continue;
+      }
+
+      // Check if line is predominantly Arabic (Quotes, Verses, Couplets)
+      const arC = (l.match(/[\u0600-\u06FF]/g) || []).length;
+      const latC = (l.match(/[a-zA-Z]/g) || []).length;
+      const isArabicDominant = arC >= 5 && arC > latC;
+
+      if (isArabicDominant) {
+        output.push(...closeLists());
+        let cleanAr = l.replace(/^[>&gt;*•\-\s]+/, '').trim();
+        if (cleanAr.startsWith('(') && cleanAr.endsWith(')')) {
+          cleanAr = cleanAr.slice(1, -1).trim();
+        }
+
+        // Check if couplet (contains ... or … or /)
+        if (cleanAr.includes('/') || cleanAr.includes('...') || cleanAr.includes('…')) {
+          const couplets = cleanAr.split(/\s*\/\s*/);
+          couplets.forEach(cStr => {
+            const cTrim = cStr.trim();
+            if (!cTrim) return;
+            const sepMatch = cTrim.match(/^(.*?)\s*(\.{2,4}|…|\.\.\s+\.\.)\s*(.*?)$/);
+            if (sepMatch) {
+              const sadr = sepMatch[1].trim();
+              const ajuz = sepMatch[3].trim();
+              output.push(`
+                <div class="summary-ar-couplet-card" dir="rtl">
+                  <span class="ar-sadr" dir="rtl">${sadr}</span>
+                  <span class="ar-verse-dots" aria-hidden="true">...</span>
+                  <span class="ar-ajuz" dir="rtl">${ajuz}</span>
+                </div>
+              `);
+            } else {
+              output.push(`
+                <div class="summary-ar-quote-card" dir="rtl">
+                  <div class="ar-quote-text" dir="rtl">${cTrim}</div>
+                </div>
+              `);
+            }
+          });
+          continue;
+        } else {
+          output.push(`
+            <div class="summary-ar-quote-card" dir="rtl">
+              <div class="ar-quote-text" dir="rtl">${cleanAr}</div>
+            </div>
+          `);
+          continue;
+        }
       }
 
       // Blockquote / Quote (> *"..."* or * "..."*)
