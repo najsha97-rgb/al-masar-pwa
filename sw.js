@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v86-cuba-font-almarai-bab20';
+const CACHE_NAME = 'almasar-v87-laras-saiz-font-almarai-setara-roman';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

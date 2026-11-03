@@ -701,7 +701,7 @@ body {
 
 .subtopic-title-ar-amiri-gold {
   font-family: 'Almarai', 'Amiri', 'Traditional Arabic', serif !important;
-  font-size: 1.15em !important;
+  font-size: 0.88em !important;
   font-weight: 700 !important;
   color: var(--gold-light, #fde047) !important;
   direction: rtl !important;
@@ -716,6 +716,7 @@ body {
 
 .arabic-inline-almarai {
   font-family: 'Almarai', 'Amiri', sans-serif !important;
+  font-size: 0.9em !important;
   font-weight: 700 !important;
   color: var(--gold-light, #fde047) !important;
   display: inline-block;
