@@ -1,4 +1,4 @@
-const CACHE_NAME = 'almasar-v97-italic-petikan-tokoh';
+const CACHE_NAME = 'almasar-v98-tetralogi-kemuncak';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
